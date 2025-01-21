@@ -1,14 +1,10 @@
 import { createStore, useStore } from 'zustand'
-import { authApi } from '@/lib/api/AuthApi'
 import { userApi } from '@/lib/api/UserApi'
 import { tasksApi } from '@/lib/api/TasksApi'
 import { listsApi } from '@/lib/api/ListsApi'
-import type { 
-  User, 
+import type {
   Task, 
   List,
-  LoginRequest, 
-  RegisterRequest, 
   ChangePasswordRequest, 
   UpdateUserInfoRequest, 
   CreateTaskRequest,
@@ -17,9 +13,17 @@ import type {
   ListOrder,
   TaskOrder
 } from '@/lib/api/interfaces'
+import { User as FirebaseUser } from 'firebase/auth';
+import { auth } from '@/lib/firebase/base';
+import { 
+  SignInWithEmailAndPassword, 
+  SignUpWithEmailAndPassword 
+} from '@/lib/firebase/EmailAndPassword';
+import { signInWithGoogle } from '@/lib/firebase/Google';
+import { signOut } from 'firebase/auth';
 
 interface State {
-  user: User | null
+  user: FirebaseUser | null;
   lists: List[]
   selectedListId: string | null
   tasks: Task[]
@@ -33,9 +37,10 @@ interface State {
   initializeStore: () => Promise<void>
   
   // Auth actions
-  login: (credentials: LoginRequest) => Promise<void>
-  register: (userInfo: RegisterRequest) => Promise<void>
-  logout: () => Promise<void>
+  loginWithEmailAndPassword: (credentials: { email: string; password: string }) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
+  register: (userInfo: { email: string; password: string }) => Promise<void>;
+  logout: () => Promise<void>;
   
   // User actions
   fetchUserInfo: (userId: string) => Promise<void>
@@ -74,99 +79,103 @@ export const appStore = createStore<State>((set, get) => ({
   
   initializeStore: async () => {
     try {
-      const userId = localStorage.getItem('userId')
-      const accessToken = localStorage.getItem('accessToken')
-      if (!userId || !accessToken) {
-        set({ 
-          user: null, 
-          lists: [], 
-          selectedListId: null, 
-          tasks: [], 
-          isLoading: false 
-        })
-        return
-      }
-  
       set({ isLoading: true })
-      // Fetch user info
-      await get().fetchUserInfo(userId)
-      // Fetch lists and tasks
-      await get().fetchLists()
+      
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          set({ user });
+          // Fetch user's lists and tasks
+          await get().fetchLists();
+        } else {
+          set({ 
+            user: null, 
+            lists: [], 
+            selectedListId: null, 
+            tasks: [], 
+            isLoading: false 
+          });
+        }
+      });
       
       // Load orders from localStorage
       const savedListOrder = localStorage.getItem('listOrder');
       const savedTaskOrders = localStorage.getItem('taskOrders');
-      
       set({ listOrder: savedListOrder ? JSON.parse(savedListOrder) : [],
             taskOrders: savedTaskOrders ? JSON.parse(savedTaskOrders) : {},
             isLoading: false })
     } catch (error) {
       // If there's an error (like expired token), clear everything
       console.error('Failed to initialize store:', error)
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-      localStorage.removeItem('userId')
       set({ 
         user: null, 
         lists: [], 
         selectedListId: null, 
         tasks: [], 
         isLoading: false,
-        error: 'Session expired. Please login again.'
+        error: 'Failed to initialize application.'
       })
       throw error;
     }
   },
 
-  login: async (credentials) => {
-    set({ isLoading: true, error: null })
+  loginWithEmailAndPassword: async (credentials) => {
     try {
-      const response = await authApi.login(credentials)
-      localStorage.setItem('accessToken', response.accessToken)
-      localStorage.setItem('refreshToken', response.refreshToken)
-      localStorage.setItem('userId', response.userId)
-      await get().fetchUserInfo(response.userId)
-      await get().fetchLists()
+      set({ isLoading: true, error: null });
+      await SignInWithEmailAndPassword(credentials.email, credentials.password);
+      set({ isLoading: false });
     } catch (error) {
-      set({ error: 'Login failed', isLoading: false })
-      throw error
+      set({ error: 'Login failed', isLoading: false });
+      throw error;
+    }
+  },
+
+  loginWithGoogle: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      
+      const result = await signInWithGoogle();
+      if (result.error) throw new Error(result.error.message);
+      
+      set({ isLoading: false });
+    } catch (error) {
+      set({ error: 'Google login failed', isLoading: false });
+      throw error;
     }
   },
 
   register: async (userInfo) => {
-    set({ isLoading: true, error: null })
     try {
-      const response = await authApi.register(userInfo)
-      localStorage.setItem('accessToken', response.accessToken)
-      localStorage.setItem('refreshToken', response.refreshToken)
-      localStorage.setItem('userId', response.userId)
-      await get().fetchUserInfo(response.userId)
-      await get().fetchLists()
+      set({ isLoading: true, error: null });
+      await SignUpWithEmailAndPassword(userInfo.email, userInfo.password);
+      set({ isLoading: false });
     } catch (error) {
-      set({ error: 'Registration failed', isLoading: false })
-      throw error
+      set({ error: 'Registration failed', isLoading: false });
+      throw error;
     }
   },
 
   logout: async () => {
     try {
-      set({ isLoading: true, error: null })
-      await authApi.logout()
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-      localStorage.removeItem('userId')
-      set({ user: null, lists: [], selectedListId: null, tasks: [], isLoading: false })
+      set({ isLoading: true, error: null });
+      await signOut(auth);
+      set({ 
+        user: null, 
+        lists: [], 
+        selectedListId: null, 
+        tasks: [], 
+        isLoading: false 
+      });
     } catch (error) {
-      set({ error: 'Logout failed', isLoading: false })
-      throw error
+      set({ error: 'Logout failed', isLoading: false });
+      throw error;
     }
   },
 
   fetchUserInfo: async (userId) => {
     set({ isLoading: true, error: null })
     try {
-      const user = await userApi.getUser(userId)
-      set({ user, isLoading: false })
+      // const user = await userApi.getUser(userId)
+      // set({ user, isLoading: false })
     } catch (error) {
       set({ error: 'Failed to fetch user info', isLoading: false })
       throw error
@@ -189,11 +198,11 @@ export const appStore = createStore<State>((set, get) => ({
     try {
       await userApi.updateUserInfo(updateData)
       // After successful update, fetch the updated user info
-      const updatedUser = await userApi.getUser(updateData.id)
-      set({ 
-        user: updatedUser, 
-        isLoading: false 
-      })
+      // const updatedUser = await userApi.getUser(updateData.id)
+      // set({ 
+      //   user: updatedUser, 
+      //   isLoading: false 
+      // })
     } catch (error) {
       set({ 
         error: 'Failed to update user information', 
