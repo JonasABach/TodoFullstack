@@ -146,19 +146,27 @@ public class AuthenticationService : IAuthService
         if (string.IsNullOrEmpty(refreshToken))
             throw new ArgumentNullException(nameof(refreshToken), "Refresh token cannot be null or empty");
 
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken.Token == refreshToken);
+        var user = await _userManager.Users
+        .Include(u => u.RefreshToken)
+        .FirstOrDefaultAsync(u => u.RefreshToken.Token == refreshToken);
 
         if (user == null || user.RefreshToken?.ExpirationDate <= DateTime.UtcNow)
             throw new UnauthorizedAccessException("Invalid refresh token");
 
-        var token = _tokenService.GenerateToken(user);
+        // Store the old refresh token ID
+        var oldRefreshTokenId = user.RefreshTokenId;
+        var accessToken = _tokenService.GenerateToken(user);
         var newRefreshToken = _tokenService.GenerateRefreshToken();
         newRefreshToken.UserId = user.Id;
-
+        
         var refreshTokenEntity = await _refreshTokenRepository.AddRefreshTokenAsync(newRefreshToken);
         await UpdateUserRefreshToken(user, refreshTokenEntity);
+        
+        // Delete old refresh token
+        if (oldRefreshTokenId.HasValue)
+          await _refreshTokenRepository.DeleteRefreshTokenAsync(oldRefreshTokenId.Value);
 
-        return GenerateAuthResponse(user, token, newRefreshToken);
+        return GenerateAuthResponse(user, accessToken, newRefreshToken);
     }
 
     private async Task UpdateUserRefreshToken(User user, RefreshToken refreshToken)
