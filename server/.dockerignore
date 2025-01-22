@@ -5,6 +5,7 @@ README.md
 .gitignore
 .idea
 .vscode
+.vs
 Dockerfile
 docker-compose.yml
 .dockerignore

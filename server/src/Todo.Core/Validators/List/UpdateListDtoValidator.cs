@@ -1,11 +1,11 @@
 using FluentValidation;
 using Todo.Core.DTOs.ListDTOs;
 
-namespace Todo.Api.Validators.List;
+namespace Todo.Core.Validators.List;
 
-public class ListDtoValidator : AbstractValidator<ListsDto>
+public class UpdateListDtoValidator : AbstractValidator<UpdateListDto>
 {
-    public ListDtoValidator()
+    public UpdateListDtoValidator()
     {
         RuleFor(x => x.Id)
             .NotNull().WithMessage("The field Id must not be null.")

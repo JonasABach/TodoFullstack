@@ -1,8 +1,7 @@
-using System;
 using FluentValidation;
 using Todo.Core.DTOs.AuthDTOs;
 
-namespace Todo.Api.Validators.Auth;
+namespace Todo.Core.Validators.Auth;
 
 public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
 {

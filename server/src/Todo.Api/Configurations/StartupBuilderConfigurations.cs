@@ -31,56 +31,6 @@ public static class StartupBuilderConfigurations
     }
 
     /// <summary>
-    ///     Adds the database connection string to the application builder.
-    /// </summary>
-    /// <param name="builder">
-    ///     The WebApplicationBuilder to initialize.
-    /// </param>
-    /// <exception cref="InvalidOperationException">
-    ///    Thrown when the connection string is not found in the configuration.
-    /// </exception>
-    public static void AddSqlServerDb(this WebApplicationBuilder builder)
-    {
-        var connectionString = builder.Configuration.GetConnectionString(Constants.SqlServerConnectionStringName)
-                               ?? throw new InvalidOperationException(
-                                   $"Connection string '{Constants.SqlServerConnectionStringName}' not found.");
-        builder.Services.AddDbContext<TodoIdentityContext>(options => options.UseSqlServer(connectionString));
-    }
-
-    /// <summary>
-    ///     Adds the Redis connection string to the application builder.
-    /// </summary>
-    /// <param name="builder">
-    ///     The WebApplicationBuilder to initialize.
-    /// </param>
-    /// <exception cref="InvalidOperationException">
-    ///     Thrown when the connection string is not found in the configuration.
-    /// </exception>
-    public static void AddRedisConnectionString(this WebApplicationBuilder builder)
-    {
-        var redisConnectionString = builder.Configuration.GetConnectionString(Constants.RedisConnectionStringName)
-                                   ?? throw new InvalidOperationException(
-                                       $"Connection string '{Constants.RedisConnectionStringName}' not found.");
-        builder.Services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = redisConnectionString;
-            options.InstanceName = "TodoFullStack_";
-        });
-    }
-
-    public static void AddHealthChecks(this WebApplicationBuilder builder)
-    {
-        var sqlServerConnectionString = builder.Configuration.GetConnectionString(Constants.SqlServerConnectionStringName)
-            ?? throw new InvalidOperationException("The SQL Server connection string is not found.");
-        var redisConnectionString = builder.Configuration.GetConnectionString(Constants.RedisConnectionStringName)
-            ?? throw new InvalidOperationException("The Redis connection string is not found.");
-
-        builder.Services.AddHealthChecks()
-            .AddSqlServer(sqlServerConnectionString)
-            .AddRedis(redisConnectionString);
-    }
-
-    /// <summary>
     ///     Initializes the JWT configurations for the application builder.
     /// </summary>
     /// <param name="builder">
@@ -162,9 +112,6 @@ public static class StartupBuilderConfigurations
 
     /// <summary>
     ///    Adds the database connection string to the application builder.
-    /// </summary>
-    /// <param name="builder"></param> <summary>
-    /// 
     /// </summary>
     /// <param name="builder"></param>
     public static void AddCorsService(this WebApplicationBuilder builder)

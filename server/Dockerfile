@@ -21,10 +21,5 @@ RUN dotnet publish -c $BUILD_CONFIGURATION -o /Todo/publish /p:UseAppHost=false
 # Final stage with the runtime environment
 FROM base AS final
 WORKDIR /Todo
-
-ENV ASPNETCORE_ENVIRONMENT=Production
-
 COPY --from=publish /Todo/publish .
-COPY --from=build   /Todo/src/src/Todo.Infrastructure/Migrations Migrations
-
-ENTRYPOINT ["sh", "-c", "dotnet Todo.Api.dll ef database update && dotnet Todo.Api.dll"]
+ENTRYPOINT ["dotnet", "Todo.Api.dll"]

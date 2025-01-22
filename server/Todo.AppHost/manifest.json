@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json.schemastore.org/aspire-8.0.json",
+  "resources": {
+    "SqlServer": {
+      "type": "container.v0",
+      "connectionString": "Server={SqlServer.bindings.tcp.host},{SqlServer.bindings.tcp.port};User ID=sa;Password={SqlServer-password.value};TrustServerCertificate=true",
+      "image": "mcr.microsoft.com/mssql/server:2022-latest",
+      "volumes": [
+        {
+          "name": "todo-sqlserver-data",
+          "target": "/var/opt/mssql",
+          "readOnly": false
+        }
+      ],
+      "env": {
+        "ACCEPT_EULA": "Y",
+        "MSSQL_SA_PASSWORD": "Password123",
+        "MSSQL_PID": "Developer",
+        "TrustServerCertificate": "true"
+      },
+      "bindings": {
+        "tcp": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "port": 4000,
+          "targetPort": 1433
+        }
+      }
+    },
+    "TodoDb": {
+      "type": "value.v0",
+      "connectionString": "{SqlServer.connectionString};Database=TodoDb"
+    },
+    "Redis": {
+      "type": "container.v0",
+      "connectionString": "{Redis.bindings.tcp.host}:{Redis.bindings.tcp.port}",
+      "image": "docker.io/redis:latest",
+      "args": [
+        "--save",
+        "300",
+        "1"
+      ],
+      "volumes": [
+        {
+          "name": "todo-redis-data",
+          "target": "/data",
+          "readOnly": false
+        }
+      ],
+      "bindings": {
+        "tcp": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "port": 4001,
+          "targetPort": 6379
+        }
+      }
+    },
+    "TodoApi": {
+      "type": "project.v0",
+      "path": "../src/Todo.Api/Todo.Api.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "true",
+        "HTTP_PORTS": "{TodoApi.bindings.http.targetPort}",
+        "ConnectionStrings__TodoDb": "{TodoDb.connectionString}",
+        "ConnectionStrings__Redis": "{Redis.connectionString}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "external": true
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http",
+          "external": true
+        }
+      }
+    }
+  }
+}

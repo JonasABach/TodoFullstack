@@ -21,10 +21,10 @@ namespace Todo.Api.Controllers;
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class AccountController(
-    IAccountRepository _accountRepository,
-    ILogger<AccountController> _logger,
-    IValidator<ChangePasswordDto> _changePasswordValidator,
-    IValidator<UpdateUserInfoDto> _updateUserInfoValidator
+    IAccountRepository accountRepository,
+    ILogger<AccountController> logger,
+    IValidator<ChangePasswordDto> changePasswordValidator,
+    IValidator<UpdateUserInfoDto> updateUserInfoValidator
     ) : ControllerBase
 {
 
@@ -44,7 +44,7 @@ public class AccountController(
     {
         if (string.IsNullOrEmpty(id))
             throw new InvalidModelStateException("User Id is required");
-        var userInfo = await _accountRepository.GetUserById(id);
+        var userInfo = await accountRepository.GetUserById(id);
         var userDto = new UserDto
         {
             Id = userInfo.Id,
@@ -54,7 +54,7 @@ public class AccountController(
             UserName = userInfo.UserName ?? string.Empty,
             PhoneNumber = userInfo.PhoneNumber
         };
-        _logger.LogInformation("User information retrieved successfully for user with id: {id}", userInfo.Id);
+        logger.LogInformation("User information retrieved successfully for user with id: {id}", userInfo.Id);
         return Ok(userDto);
     }
 
@@ -72,13 +72,13 @@ public class AccountController(
     [HttpPut("change-password")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
     {
-        var validationResult = _changePasswordValidator.Validate(changePasswordDto);
+        var validationResult = await changePasswordValidator.ValidateAsync(changePasswordDto);
         if (!validationResult.IsValid)
             throw new InvalidModelStateException(validationResult.ToString());
 
-        await _accountRepository.ChangePassword(changePasswordDto);
+        await accountRepository.ChangePassword(changePasswordDto);
 
-        _logger.LogInformation("Password changed successfully for user with id: {id}", changePasswordDto.Id);
+        logger.LogInformation("Password changed successfully for user with id: {id}", changePasswordDto.Id);
         return Ok("Password changed successfully.");
     }
 
@@ -96,13 +96,13 @@ public class AccountController(
     [HttpPut("update-user-info")]
     public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserInfoDto updateUserInfoDto)
     {
-        var validationResult = _updateUserInfoValidator.Validate(updateUserInfoDto);
+        var validationResult = await updateUserInfoValidator.ValidateAsync(updateUserInfoDto);
         if (!validationResult.IsValid)
             throw new InvalidModelStateException(validationResult.ToString());
 
-        var updatedUser = await _accountRepository.UpdateUserInfo(updateUserInfoDto);
+        var updatedUser = await accountRepository.UpdateUserInfo(updateUserInfoDto);
 
-        _logger.LogInformation("User information updated successfully for user with id: {id}", updateUserInfoDto.Id);
+        logger.LogInformation("User information updated successfully for user with id: {id}", updateUserInfoDto.Id);
         return Ok(updatedUser);
     }
 
@@ -125,9 +125,9 @@ public class AccountController(
         if (string.IsNullOrEmpty(id))
             throw new InvalidModelStateException("Id is required");
 
-        await _accountRepository.DeleteAccount(id);
+        await accountRepository.DeleteAccount(id);
 
-        _logger.LogInformation("Account deleted successfully for user with id: {id}", id);
+        logger.LogInformation("Account deleted successfully for user with id: {id}", id);
         return Ok("Account deleted successfully.");
     }
 }

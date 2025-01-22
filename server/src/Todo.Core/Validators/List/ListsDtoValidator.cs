@@ -1,12 +1,16 @@
 using FluentValidation;
 using Todo.Core.DTOs.ListDTOs;
 
-namespace Todo.Api.Validators.List;
+namespace Todo.Core.Validators.List;
 
-public class AddListDtoValidator : AbstractValidator<AddListDto>
+public class ListDtoValidator : AbstractValidator<ListsDto>
 {
-    public AddListDtoValidator()
+    public ListDtoValidator()
     {
+        RuleFor(x => x.Id)
+            .NotNull().WithMessage("The field Id must not be null.")
+            .NotEmpty().WithMessage("The field Id must not be empty.");
+
         RuleFor(x => x.Name)
             .NotNull().WithMessage("The field Name must not be null.")
             .NotEmpty().WithMessage("The field Name must not be empty.")
@@ -15,9 +19,5 @@ public class AddListDtoValidator : AbstractValidator<AddListDto>
         RuleFor(x => x.Description)
             .MaximumLength(500)
             .WithMessage("The field Description must not exceed 500 characters.");
-
-        RuleFor(x => x.UserId)
-            .NotNull().WithMessage("The field UserId must not be null.")
-            .NotEmpty().WithMessage("The field UserId must not be empty.");
     }
 }

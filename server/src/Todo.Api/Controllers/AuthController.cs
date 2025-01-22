@@ -44,7 +44,7 @@ public class AuthController(
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
     {
-        var validationResult = loginUserValidator.Validate(loginDto);
+        var validationResult = await loginUserValidator.ValidateAsync(loginDto);
         if (!validationResult.IsValid)
             throw new InvalidModelStateException(validationResult.ToString());
 
@@ -90,7 +90,7 @@ public class AuthController(
     [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] RegisterUserDto registerDto)
     {
-        var validationResult = registerUserValidator.Validate(registerDto);
+        var validationResult = await registerUserValidator.ValidateAsync(registerDto);
         if (!validationResult.IsValid)
             throw new InvalidModelStateException(validationResult.ToString());
 

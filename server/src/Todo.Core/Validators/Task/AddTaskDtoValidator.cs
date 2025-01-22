@@ -1,7 +1,7 @@
 using FluentValidation;
 using Todo.Core.DTOs.TasksDtos;
 
-namespace Todo.Api.Validators.Task;
+namespace Todo.Core.Validators.Task;
 
 public class AddTaskDtoValidator : AbstractValidator<AddTaskDto>
 {

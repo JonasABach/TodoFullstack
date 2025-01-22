@@ -1,0 +1,48 @@
+services:
+  SqlServer:
+    container_name: "SqlServer"
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Password123"
+      MSSQL_PID: "Developer"
+      TrustServerCertificate: "true"
+    volumes:
+    - "todo-sqlserver-data:/var/opt/mssql"
+    ports:
+    - target: 1433
+      published: 4000
+    restart: unless-stopped
+  Redis:
+    container_name: "Redis"
+    image: "docker.io/redis:latest"
+    volumes:
+    - "todo-redis-data:/data"
+    ports:
+    - target: 6379
+      published: 4001
+    command:
+    - "--save"
+    - "300"
+    - "1"
+    restart: unless-stopped
+  TodoApi:
+    container_name: "TodoApi"
+    image: "todoapi:latest"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      HTTP_PORTS: "8080"
+      ConnectionStrings__TodoDb: "Server=SqlServer,4000;User ID=sa;Password={SqlServer-password.value};TrustServerCertificate=true;Database=TodoDb"
+      ConnectionStrings__Redis: "Redis:4001"
+    ports:
+    - target: 8080
+      published: 10000
+    - target: 8443
+      published: 10001
+    restart: unless-stopped
+volumes:
+  todo-sqlserver-data: {}
+  todo-redis-data: {}

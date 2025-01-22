@@ -1,7 +1,7 @@
 using FluentValidation;
 using Todo.Core.DTOs.AccountDTOs;
 
-namespace Todo.Api.Validators.Account;
+namespace Todo.Core.Validators.Account;
 
 public class UserDtoValidator : AbstractValidator<UserDto>
 {

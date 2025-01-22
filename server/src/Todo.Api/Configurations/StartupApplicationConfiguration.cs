@@ -37,6 +37,7 @@ public static class StartupApplicationConfiguration
     {
         app.UseDeveloperExceptionPage();
         app.UseCors(Constants.ClientCrossOriginPolicyDevName);
+        app.UseAutoMigrationAtStartup();
     }
 
     /// <summary>

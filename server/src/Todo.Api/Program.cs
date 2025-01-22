@@ -2,8 +2,9 @@ using FluentValidation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Todo.Api.Configurations;
-using Todo.Api.Validators.Account;
+using Todo.Core.Validators.Account;
 using Todo.Infrastructure;
+using Todo.Infrastructure.DatabaseContexts;
 
 namespace Todo.Api;
 
@@ -30,14 +31,17 @@ public class Program
         builder.AddSwaggerService();
         builder.AddLoggingService();
 
-        builder.AddSqlServerDb();
-        builder.AddRedisConnectionString();
-        builder.AddHealthChecks();
+        builder.AddSqlServerDbContext<TodoIdentityContext>(connectionName: "TodoDb");
+        builder.AddRedisDistributedCache(connectionName: "Redis");
+        builder.Services.AddHealthChecks();
+
         builder.InitializeJwtConfigurations();
         builder.AddAuthenticationService();
         builder.Services.AddAuthorizationBuilder();
+
         builder.AddIdentityService();
         builder.AddCorsService();
+
         builder.RegisterServices();
         builder.RegisterRepositories();
         builder.RegisterCachingRepositories();
@@ -49,7 +53,6 @@ public class Program
         var app = builder.Build();
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
-        app.UseAutoMigrationAtStartup();
 
         if (app.Environment.IsDevelopment())
             app.DevelopmentMode();
@@ -70,7 +73,6 @@ public class Program
         app.UseStatusCodePages();
         app.MapControllers();
 
-        // Run the app.
         app.Run();
     }
 }

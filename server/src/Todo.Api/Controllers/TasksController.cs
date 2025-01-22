@@ -22,7 +22,8 @@ namespace Todo.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class TasksController(IRepository<Entity_Task, AddTaskDto, UpdateTaskDto> taskRepository,
+public class TasksController(
+    IRepository<Entity_Task, AddTaskDto, UpdateTaskDto> taskRepository,
     ILogger<TasksController> logger,
     IValidator<AddTaskDto> addTaskValidator,
     IValidator<UpdateTaskDto> updateTaskValidator) : ControllerBase
@@ -85,7 +86,7 @@ public class TasksController(IRepository<Entity_Task, AddTaskDto, UpdateTaskDto>
     [HttpPost("add-task")]
     public async Task<ActionResult<Entity_Task>> AddTask([FromBody] AddTaskDto addTaskDto)
     {
-        var validationResult = addTaskValidator.Validate(addTaskDto);
+        var validationResult = await addTaskValidator.ValidateAsync(addTaskDto);
         if (!validationResult.IsValid)
             throw new InvalidModelStateException(validationResult.ToString());
 
@@ -107,7 +108,7 @@ public class TasksController(IRepository<Entity_Task, AddTaskDto, UpdateTaskDto>
     [HttpPut("update-task")]
     public async Task<ActionResult<Entity_Task>> UpdateTask([FromBody] UpdateTaskDto updateTaskDto)
     {
-        var validationResult = updateTaskValidator.Validate(updateTaskDto);
+        var validationResult = await updateTaskValidator.ValidateAsync(updateTaskDto);
         if (!validationResult.IsValid)
             throw new InvalidModelStateException(validationResult.ToString());
 
