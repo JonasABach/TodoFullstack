@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Todo.Infrastructure.DatabaseContexts;
+namespace Todo.Data.DatabaseContexts;
 
 public class TodoIdentityContextFactory : IDesignTimeDbContextFactory<TodoIdentityContext>
 {

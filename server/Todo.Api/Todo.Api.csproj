@@ -44,6 +44,7 @@
     </ItemGroup>
     
     <ItemGroup>
+      <ProjectReference Include="../Todo.Data/Todo.Data.csproj" />
       <ProjectReference Include="..\Todo.Core\Todo.Core.csproj" />
       <ProjectReference Include="..\Todo.Infrastructure\Todo.Infrastructure.csproj" />
     </ItemGroup>

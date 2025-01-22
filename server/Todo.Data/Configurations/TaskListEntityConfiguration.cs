@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Todo.Core.Entities;
 
-namespace Todo.Core.Configurations;
+namespace Todo.Data.Configurations;
 
 /// <summary>
 ///     The entity configuration for the TaskList entity.

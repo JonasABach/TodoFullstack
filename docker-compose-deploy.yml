@@ -39,7 +39,7 @@ services:
         networks:
             - todo-network
         command:
-            - "sh -c dotnet Todo.Api.dll ef database update && dotnet Todo.Api.dll"
+            - "dotnet Todo.Api.dll"
         labels:
             - "com.centurylinklabs.watchtower.enable=true"
 

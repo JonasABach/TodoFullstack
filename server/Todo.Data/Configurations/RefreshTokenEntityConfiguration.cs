@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Todo.Core.Entities;
 
-namespace Todo.Core.Configurations;
+namespace Todo.Data.Configurations;
 
 /// <summary>
 ///     Configuration for the RefreshToken entity.

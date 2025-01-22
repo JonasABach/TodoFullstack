@@ -100,7 +100,7 @@ public class TokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.Email,
                 user.Email ?? throw new NullReferenceException("User email is null")),
             new Claim(JwtRegisteredClaimNames.GivenName,
-                user.UserName ?? throw new NullReferenceException("User username is null")),
+                user.Username ?? throw new NullReferenceException("User username is null")),
             new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
             new Claim(JwtRegisteredClaimNames.Exp,
                 new DateTimeOffset(DateTime.Now.AddDays(_jwtConfigurations.AccessTokenExpirationDays)).ToUnixTimeSeconds().ToString()),

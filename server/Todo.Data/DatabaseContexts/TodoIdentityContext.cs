@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Todo.Core.Configurations;
+using Todo.Data.Configurations;
 using Todo.Core.Entities;
 using Task = Todo.Core.Entities.Task;
 
-namespace Todo.Infrastructure.DatabaseContexts;
+namespace Todo.Data.DatabaseContexts;
 
 /// <summary>
 ///     The database context for the application that extends the IdentityDbContext.
@@ -12,8 +12,13 @@ namespace Todo.Infrastructure.DatabaseContexts;
 /// <param name="options">
 ///     The options to be passed to the base class.
 /// </param>
-public class TodoIdentityContext(DbContextOptions<TodoIdentityContext> options) : IdentityDbContext<User>(options)
+public class TodoIdentityContext(DbContextOptions<TodoIdentityContext> options) : DbContext(options)
 {
+    /// <summary>
+    ///     The DbSet for the User model in the database.
+    /// </summary>
+    public DbSet<User> Users { get; init; }
+
     /// <summary>
     ///     The DbSet for the Task model in the database.
     /// </summary>
@@ -39,9 +44,9 @@ public class TodoIdentityContext(DbContextOptions<TodoIdentityContext> options) 
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         modelBuilder.ApplyConfiguration(new TaskListEntityConfiguration());
         modelBuilder.ApplyConfiguration(new TaskEntityConfiguration());
         modelBuilder.ApplyConfiguration(new RefreshTokenEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
     }
 }

@@ -11,10 +11,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="../Todo.Data/Todo.Data.csproj" />
       <ProjectReference Include="..\Todo.Core\Todo.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="FirebaseAdmin" Version="3.1.0" />
+      <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />

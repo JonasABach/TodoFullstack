@@ -15,7 +15,7 @@ services:
 
     api:
         build:
-            context: src/server
+            context: server
             dockerfile: Dockerfile
         image: todo-api:latest
         container_name: todo-api
@@ -28,7 +28,7 @@ services:
         depends_on:
             - cache
         command:
-            - "sh -c dotnet Todo.Api.dll ef database update && dotnet Todo.Api.dll"
+            - "dotnet Todo.Api.dll"
         healthcheck:
             test: ["CMD", "curl", "-f", "http://todo-api:8080/health"]
             interval: 1m30s
@@ -37,7 +37,7 @@ services:
             start_period: 10s
 
     client:
-        build: src/client
+        build: client
         image: todo-client:latest
         container_name: todo-client
         networks:

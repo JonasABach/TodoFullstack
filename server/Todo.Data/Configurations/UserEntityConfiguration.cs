@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Todo.Core.Entities;
 
-namespace Todo.Core.Configurations;
+namespace Todo.Data.Configurations;
 
 /// <summary>
 ///     The entity configuration for the User entity.
@@ -15,6 +15,17 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     /// <param name="builder"> The builder to be used to configure the entity. </param>
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.HasKey(user => user.Id);
+
+        builder.Property(user => user.Email)
+            .IsRequired(true);
+
+        builder.Property(user => user.username)
+            .IsRequired(true);
+
+        builder.Property(user => user.phoneNumber)
+            .IsRequired(false);
+
         builder.Property(user => user.FirstName)
             .IsRequired()
             .HasMaxLength(25);

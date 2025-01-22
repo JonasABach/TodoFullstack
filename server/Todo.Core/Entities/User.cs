@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
 
 namespace Todo.Core.Entities;
 
@@ -8,8 +7,31 @@ namespace Todo.Core.Entities;
 ///     A user has a first and last name, and a list of TaskLists.
 ///     Inherits from IdentityUser, which provides the Id, Email, and Password properties.
 /// </summary>
-public class User : IdentityUser
+public class User
 {
+    /// <summary>
+    ///     This is the id of the user.
+    /// </summary>
+    [Key]
+    public string Id { get; set; }
+
+    /// <summary>
+    ///     The email of the user.
+    /// </summary>
+    [Required]
+    public string Email { get; set; }
+
+    /// <summary>
+    ///     The username of the user.
+    /// </summary>
+    [Required]
+    public string Username { get; set; }
+
+    /// <summary>
+    ///     The phone number of the user.
+    /// </summary>
+    public string? PhoneNumber { get; set; }
+
     /// <summary>
     ///     The first name of the user.
     ///     Required, must be between 3 and 25 characters.
