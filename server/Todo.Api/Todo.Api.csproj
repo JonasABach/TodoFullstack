@@ -9,6 +9,7 @@
 
     <PropertyGroup>
       <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+      <UserSecretsId>7b045ee3-4b06-474f-a8a2-fcfa723e3735</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -37,10 +38,6 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
         <PackageReference Include="StackExchange.Redis" Version="2.8.24" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.0" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <Folder Include="obj\" />
     </ItemGroup>
     
     <ItemGroup>

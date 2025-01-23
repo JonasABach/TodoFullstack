@@ -13,13 +13,13 @@ namespace Todo.Api;
 /// </summary>
 public class Program
 {
-    /// <summary>
-    ///     The main method that will be called when the application starts.
-    /// </summary>
-    /// <param name="args">
-    ///     The arguments passed to the application.
-    /// </param>
-    public static void Main(string[] args)
+	/// <summary>
+	///     The main method that will be called when the application starts.
+	/// </summary>
+	/// <param name="args">
+	///     The arguments passed to the application.
+	/// </param>
+	public static void Main(string[] args)
     {
         // Create the builder.
         var builder = WebApplication.CreateBuilder(args);

@@ -1,20 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Todo.Core.Entities;
 using Todo.Core.Enums;
-using Task = Todo.Core.Entities.Task;
 
 namespace Todo.Data.Configurations;
 
 /// <summary>
 ///     The entity configuration for the Task entity.
 /// </summary>
-public class TaskEntityConfiguration : IEntityTypeConfiguration<Task>
+public class TaskEntityConfiguration : IEntityTypeConfiguration<TaskItem>
 {
     /// <summary>
     ///     Configures the entity of type Task.
     /// </summary>
     /// <param name="builder"> The builder to be used to configure the entity. </param>
-    public void Configure(EntityTypeBuilder<Task> builder)
+    public void Configure(EntityTypeBuilder<TaskItem> builder)
     {
         builder.HasKey(task => task.Id);
         builder.Property(task => task.Id).ValueGeneratedOnAdd();

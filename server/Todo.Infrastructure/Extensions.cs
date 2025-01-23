@@ -7,7 +7,6 @@ using Todo.Core.Interfaces;
 using Todo.Infrastructure.Repositories.Cached;
 using Todo.Infrastructure.Repositories.DB;
 using Todo.Infrastructure.Services;
-using Task = Todo.Core.Entities.Task;
 
 namespace Todo.Infrastructure;
 
@@ -32,6 +31,6 @@ public static class Extensions
         builder.Services.AddScoped<IRedisCacheService, RedisCachingService>();
         builder.Services.AddScoped<IAccountRepository, CachedAccountRepository>();
         builder.Services.AddScoped<IRepository<TaskList, AddListDto, UpdateListDto>, CachedListRepository>();
-        builder.Services.AddScoped<IRepository<Task, AddTaskDto, UpdateTaskDto>, CachedTasksRepository>();
+        builder.Services.AddScoped<IRepository<TaskItem, AddTaskDto, UpdateTaskDto>, CachedTasksRepository>();
     }
 }

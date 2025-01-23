@@ -8,7 +8,7 @@ namespace Todo.Core.Entities;
 /// <summary>
 ///     The entity that represents a task in the database.
 /// </summary>
-public class Task
+public class TaskItem
 {
     /// <summary>
     ///     The unique identifier for the task entity, the primary key,

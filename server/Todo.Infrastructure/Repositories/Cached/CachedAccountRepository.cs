@@ -4,7 +4,6 @@ using Todo.Core.DTOs.AccountDTOs;
 using Todo.Core.Entities;
 using Todo.Core.Interfaces;
 using Todo.Infrastructure.Repositories.DB;
-using Task = System.Threading.Tasks.Task;
 
 namespace Todo.Infrastructure.Repositories.Cached;
 

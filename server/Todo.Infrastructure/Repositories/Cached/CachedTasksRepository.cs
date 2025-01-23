@@ -1,11 +1,11 @@
 using Todo.Core.DTOs.TasksDtos;
 using Todo.Core.Interfaces;
 using Todo.Infrastructure.Repositories.DB;
-using Task_Entity = Todo.Core.Entities.Task;
+using Todo.Core.Entities;
 
 namespace Todo.Infrastructure.Repositories.Cached;
 
-public class CachedTasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDto>
+public class CachedTasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
 {
     private readonly TasksRepository _tasksRepository;
     private readonly IRedisCacheService _cacheService;
@@ -21,11 +21,11 @@ public class CachedTasksRepository : IRepository<Task_Entity, AddTaskDto, Update
         _cacheService = cacheService;
     }
     
-    public async Task<IEnumerable<Task_Entity>> GetAllAsync(string id)
+    public async Task<IEnumerable<TaskItem>> GetAllAsync(string id)
     {
         var cacheKey = $"List-{id}-Tasks";
 
-        var cachedTasks = await _cacheService.GetData<IEnumerable<Task_Entity>>(cacheKey);
+        var cachedTasks = await _cacheService.GetData<IEnumerable<TaskItem>>(cacheKey);
         if (cachedTasks is not null) return cachedTasks;
 
         var tasks = await _tasksRepository.GetAllAsync(id);
@@ -34,11 +34,11 @@ public class CachedTasksRepository : IRepository<Task_Entity, AddTaskDto, Update
         return taskEntities;
     }
 
-    public async Task<Task_Entity> GetByIdAsync(Guid id)
+    public async Task<TaskItem> GetByIdAsync(Guid id)
     {
         var cacheKey = $"Task-{id}";
 
-        var cachedTask = await _cacheService.GetData<Task_Entity>(cacheKey);
+        var cachedTask = await _cacheService.GetData<TaskItem>(cacheKey);
         if (cachedTask is not null) return cachedTask;
 
         var task = await _tasksRepository.GetByIdAsync(id);
@@ -46,14 +46,14 @@ public class CachedTasksRepository : IRepository<Task_Entity, AddTaskDto, Update
         return task;
     }
 
-    public async Task<Task_Entity> AddAsync(AddTaskDto entity)
+    public async Task<TaskItem> AddAsync(AddTaskDto entity)
     {
         var addedTask = await _tasksRepository.AddAsync(entity);
         await UpdateAllTasksInCache(entity.ListId.ToString());
         return addedTask;
     }
 
-    public async Task<Task_Entity> UpdateAsync(UpdateTaskDto entity)
+    public async Task<TaskItem> UpdateAsync(UpdateTaskDto entity)
     {
         var updatedTask = await _tasksRepository.UpdateAsync(entity);
         var taskEntity = await _tasksRepository.GetByIdAsync(entity.Id);
@@ -62,7 +62,7 @@ public class CachedTasksRepository : IRepository<Task_Entity, AddTaskDto, Update
         return updatedTask;
     }
     
-    public Task_Entity UpdateEntity(Task_Entity entity, UpdateTaskDto dto) => _tasksRepository.UpdateEntity(entity, dto);
+    public TaskItem UpdateEntity(TaskItem entity, UpdateTaskDto dto) => _tasksRepository.UpdateEntity(entity, dto);
 
     public async Task DeleteAsync(Guid id)
     {

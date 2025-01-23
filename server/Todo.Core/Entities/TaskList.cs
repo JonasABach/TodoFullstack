@@ -35,7 +35,7 @@ public class TaskList
     ///     The list of tasks is not lazy-loaded, and the tasks are eagerly-loaded.
     ///     The list is not mapped to the database.
     /// </summary>
-    public virtual List<Task> Tasks { get; set; } = [];
+    public virtual List<TaskItem> Tasks { get; set; } = [];
 
     /// <summary>
     ///     The user that the list of tasks belongs to, not required, and can be null.

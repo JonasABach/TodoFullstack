@@ -4,14 +4,14 @@ using Todo.Core.Enums;
 using Todo.Core.Exceptions;
 using Todo.Core.Interfaces;
 using Todo.Data.DatabaseContexts;
-using Task_Entity = Todo.Core.Entities.Task;
+using Todo.Core.Entities;
 
 namespace Todo.Infrastructure.Repositories.DB;
 
 /// <summary>
 ///     A class that implements the IRepository interface for the Task entity.
 /// </summary>
-public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDto>
+public class TasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
 {
     /// <summary>
     ///     The database context for the Identity database.
@@ -38,7 +38,7 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
     /// <exception cref="ArgumentException">
     ///     Thrown when the specified ID is not a valid GUID.
     /// </exception>
-    public async Task<IEnumerable<Task_Entity>> GetAllAsync(string id)
+    public async Task<IEnumerable<TaskItem>> GetAllAsync(string id)
     {
         if (!Guid.TryParse(id, out var guidId))
             throw new ArgumentException("The specified ID is not a valid GUID.");
@@ -58,7 +58,7 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
     /// <returns>
     ///     A Task that represents the asynchronous operation. The Task contains a Model Task.
     /// </returns>
-    public Task<Task_Entity> GetByIdAsync(Guid id)
+    public Task<TaskItem> GetByIdAsync(Guid id)
     {
         return _identityContext.Tasks
             .AsNoTracking()
@@ -78,14 +78,14 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
     /// <exception cref="ListNotFoundException">
     ///     Thrown when the List with the specified ID is not found.
     /// </exception>
-    public async Task<Task_Entity> AddAsync(AddTaskDto dto)
+    public async Task<TaskItem> AddAsync(AddTaskDto dto)
     {
         _ = await _identityContext.Lists
                 .Where(l => l.Id == dto.ListId)
                 .FirstAsync() ??
             throw new ListNotFoundException($"List with the specified ID: {dto.ListId} not found.");
 
-        var task = new Task_Entity()
+        var task = new TaskItem()
         {
             Name = dto.Name,
             Description = dto.Description ?? string.Empty,
@@ -111,7 +111,7 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
     /// <exception cref="TaskNotFoundException">
     ///     Thrown when the Task with the specified ID is not found.
     /// </exception>
-    public async Task<Task_Entity> UpdateAsync(UpdateTaskDto entity)
+    public async Task<TaskItem> UpdateAsync(UpdateTaskDto entity)
     {
         var task = await _identityContext.Tasks
                        .Where(l => l.Id == entity.Id)
@@ -137,7 +137,7 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
     /// <returns>
     ///     The updated Task entity.
     /// </returns>
-    public Task_Entity UpdateEntity(Task_Entity entity, UpdateTaskDto dto)
+    public TaskItem UpdateEntity(TaskItem entity, UpdateTaskDto dto)
     {
         // Update the task's name if the new value is not null or empty.
         if (!string.IsNullOrEmpty(dto.Name))

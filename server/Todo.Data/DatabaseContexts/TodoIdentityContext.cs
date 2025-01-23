@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Todo.Data.Configurations;
 using Todo.Core.Entities;
-using Task = Todo.Core.Entities.Task;
 
 namespace Todo.Data.DatabaseContexts;
 
@@ -22,7 +20,7 @@ public class TodoIdentityContext(DbContextOptions<TodoIdentityContext> options) 
     /// <summary>
     ///     The DbSet for the Task model in the database.
     /// </summary>
-    public DbSet<Task> Tasks { get; init; }
+    public DbSet<TaskItem> Tasks { get; init; }
 
     /// <summary>
     ///     The DbSet for the TaskList model in the database.

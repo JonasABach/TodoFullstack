@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Todo.Core.DTOs.TasksDtos;
 using Todo.Core.Exceptions;
 using Todo.Core.Interfaces;
-using Entity_Task = Todo.Core.Entities.Task;
+using Entity_Task = Todo.Core.Entities.TaskI;
 
 namespace Todo.Api.Controllers;
 

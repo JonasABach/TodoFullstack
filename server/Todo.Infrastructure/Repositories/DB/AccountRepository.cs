@@ -5,7 +5,6 @@ using Todo.Core.DTOs.AccountDTOs;
 using Todo.Core.Entities;
 using Todo.Core.Exceptions;
 using Todo.Core.Interfaces;
-using Task = System.Threading.Tasks.Task;
 
 namespace Todo.Infrastructure.Repositories.DB;
 
