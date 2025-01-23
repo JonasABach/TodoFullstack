@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Todo.Core.DTOs.AuthDTOs;
 using Todo.Core.Entities;
 using Todo.Core.Interfaces;
-using Todo.Infrastructure.DatabaseContexts;
+using Todo.Data.DatabaseContexts;
 using Task = System.Threading.Tasks.Task;
 
 namespace Todo.Infrastructure.Repositories.DB;

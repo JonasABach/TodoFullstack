@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using Todo.Core.Entities;
+using Todo.Core.Exceptions;
+using Todo.Data.DatabaseContexts;
 using Todo.Infrastructure.Configurations;
-using Todo.Infrastructure.DatabaseContexts;
 
 namespace Todo.Api.Configurations;
 
@@ -73,12 +76,67 @@ public static class StartupBuilderConfigurations
                 ValidateAudience = true,
                 ValidAudience = jwtConfigurations.Audience,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfigurations.SecretKey)
-                ),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfigurations.SecretKey)),
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
         });
+    }
+
+    public static void AddFirebaseAuthentication(this WebApplicationBuilder builder)
+    {
+        var firebaseCredentials = new FirebaseCredentials();
+        builder.Configuration.GetSection("Authentication:Firebase").Bind(firebaseCredentials);
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.IncludeErrorDetails = true;
+                options.Authority = $"https://securetoken.google.com/{firebaseCredentials.Project_Id}";
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = $"https://securetoken.google.com/{firebaseCredentials.Project_Id}",
+                    ValidateAudience = true,
+                    ValidAudience = firebaseCredentials.Project_Id,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(firebaseCredentials.Private_Key)),
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        // Receive the JWT token that firebase has provided
+                        var firebaseToken = context.SecurityToken as Microsoft.IdentityModel.JsonWebTokens.JsonWebToken;
+                        // Get the Firebase UID of this user
+                        var firebaseUid = firebaseToken?.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
+                        if (!string.IsNullOrEmpty(firebaseUid))
+                        {
+                            // Use the Firebase UID to find or create the user in your Identity system
+                            var userManager = context.HttpContext.RequestServices
+                                .GetRequiredService<UserManager<User>>();
+                            var user = await userManager.FindByNameAsync(firebaseUid);
+                            if (user is null)
+                            {
+                                var email = firebaseToken?.Claims.FirstOrDefault(c => c.Type == "email")?.Value ??
+                                            throw new InvalidEmailException("Email not found in Firebase token.");
+                                user = new User
+                                {
+                                    Id = firebaseUid,
+                                    Email = email,
+                                    Username = email,
+                                    FirstName = firebaseToken.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? $"Tasker {email}",
+                                    LastName = string.Empty,
+                                    Lists = [],
+                                    RefreshToken = null
+                                };
+                                await userManager.CreateAsync(user);
+                            }
+                        }
+                    }
+                };
+            });
     }
 
     /// <summary>
@@ -144,22 +202,26 @@ public static class StartupBuilderConfigurations
     /// </param>
     public static void AddSwaggerService(this WebApplicationBuilder builder)
     {
-        builder.Services.AddSwaggerGen(c =>
+        builder.Services.AddSwaggerGen(options =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Version = "v1" });
-            var securityScheme = new OpenApiSecurityScheme
+            options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
             {
-                Name = "Authorization",
-                Description = "Enter your JWT token in this field: {your token}",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Scheme = "Bearer",
-                BearerFormat = "JWT"
-            };
+                Type = SecuritySchemeType.OAuth2,
 
-            c.AddSecurityDefinition("Bearer", securityScheme);
+                Flows = new OpenApiOAuthFlows
+                {
+                    Password = new OpenApiOAuthFlow
+                    {
+                        TokenUrl = new Uri("/v1/auth", UriKind.Relative),
+                        Extensions = new Dictionary<string, IOpenApiExtension>
+                        {
+                            { "returnSecureToken", new OpenApiBoolean(true) },
+                        },
+                    }
+                }
+            });
 
-            var securityRequirement = new OpenApiSecurityRequirement
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
@@ -167,14 +229,15 @@ public static class StartupBuilderConfigurations
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
+                            Id = JwtBearerDefaults.AuthenticationScheme
+                        },
+                        Scheme = "oauth2",
+                        Name = JwtBearerDefaults.AuthenticationScheme,
+                        In = ParameterLocation.Header,
                     },
-                    Array.Empty<string>()
+                    new List<string> { "openid", "email", "profile" }
                 }
-            };
-
-            c.AddSecurityRequirement(securityRequirement);
+            });
         });
     }
 

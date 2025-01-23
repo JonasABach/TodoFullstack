@@ -3,7 +3,7 @@ using Todo.Core.DTOs.TasksDtos;
 using Todo.Core.Enums;
 using Todo.Core.Exceptions;
 using Todo.Core.Interfaces;
-using Todo.Infrastructure.DatabaseContexts;
+using Todo.Data.DatabaseContexts;
 using Task_Entity = Todo.Core.Entities.Task;
 
 namespace Todo.Infrastructure.Repositories.DB;

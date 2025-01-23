@@ -20,10 +20,10 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.Email)
             .IsRequired(true);
 
-        builder.Property(user => user.username)
+        builder.Property(user => user.Username)
             .IsRequired(true);
 
-        builder.Property(user => user.phoneNumber)
+        builder.Property(user => user.PhoneNumber)
             .IsRequired(false);
 
         builder.Property(user => user.FirstName)

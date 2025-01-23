@@ -113,7 +113,7 @@ public class AccountRepository : IAccountRepository
             throw new PasswordDidNotChangeException($"Failed to change password because of: {string.Join(", ",
                 result.Errors.Select(e => e.Description))}");
 
-        _logger.LogInformation("Password changed successfully for user with username: {username}", user.UserName);
+        _logger.LogInformation("Password changed successfully for user with username: {username}", user.Username);
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ public class AccountRepository : IAccountRepository
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email ?? throw new UserInformationDidNotUpdateException("Email is required."),
-            UserName = user.UserName ?? throw new UserInformationDidNotUpdateException("Username is required."),
+            UserName = user.Username ?? throw new UserInformationDidNotUpdateException("Username is required."),
             PhoneNumber = user.PhoneNumber
         };
     }
@@ -173,7 +173,7 @@ public class AccountRepository : IAccountRepository
 
         // Update the user's username if it's provided
         if (!string.IsNullOrEmpty(updateUserInfoDto.NewUserName))
-            user.UserName = updateUserInfoDto.NewUserName;
+            user.Username = updateUserInfoDto.NewUserName;
 
         user.PhoneNumber = updateUserInfoDto.NewPhoneNumber;
     }

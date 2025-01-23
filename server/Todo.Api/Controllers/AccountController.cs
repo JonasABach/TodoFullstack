@@ -50,8 +50,8 @@ public class AccountController(
             Id = userInfo.Id,
             FirstName = userInfo.FirstName,
             LastName = userInfo.LastName,
-            Email = userInfo.Email ?? string.Empty,
-            UserName = userInfo.UserName ?? string.Empty,
+            Email = userInfo.Email,
+            UserName = userInfo.Username,
             PhoneNumber = userInfo.PhoneNumber
         };
         logger.LogInformation("User information retrieved successfully for user with id: {id}", userInfo.Id);

@@ -109,12 +109,12 @@ public class AuthController(
     public async Task<IActionResult> Logout()
     {
         var user = await accountRepository.GetUserByClaims(User);
-        if (user is null || string.IsNullOrEmpty(user.UserName))
+        if (user is null || string.IsNullOrEmpty(user.Username))
             throw new InvalidModelStateException("User not found");
 
-        await authenticationService.Logout(user.UserName);
+        await authenticationService.Logout(user.Username);
 
-        logger.LogInformation("User logged out successfully with username: {username}", user.UserName);
+        logger.LogInformation("User logged out successfully with username: {username}", user.Username);
         return Ok();
     }
 }

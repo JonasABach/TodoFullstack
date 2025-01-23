@@ -3,8 +3,8 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Todo.Api.Configurations;
 using Todo.Core.Validators.Account;
+using Todo.Data.DatabaseContexts;
 using Todo.Infrastructure;
-using Todo.Infrastructure.DatabaseContexts;
 
 namespace Todo.Api;
 
