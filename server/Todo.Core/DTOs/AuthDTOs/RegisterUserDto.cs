@@ -8,6 +8,11 @@ namespace Todo.Core.DTOs.AuthDTOs;
 public class RegisterUserDto
 {
     /// <summary>
+    ///     The id of the user from the firebase authentication.
+    /// </summary>
+    public required string Id { get; set; }
+
+    /// <summary>
     ///     The email address of the user.
     /// </summary>
     public required string Email { get; set; }
@@ -26,9 +31,4 @@ public class RegisterUserDto
     ///     The last name of the user.
     /// </summary>
     public required string LastName { get; set; }
-
-    /// <summary>
-    ///     The password of the user.
-    /// </summary>
-    public required string Password { get; set; }
 }

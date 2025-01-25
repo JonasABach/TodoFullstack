@@ -1,10 +1,13 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Todo.Core.DTOs.AccountDTOs;
+using Todo.Core.DTOs.AuthDTOs;
 using Todo.Core.Entities;
 using Todo.Core.Exceptions;
 using Todo.Core.Interfaces;
+using Todo.Data.DatabaseContexts;
 
 namespace Todo.Infrastructure.Repositories.DB;
 
@@ -14,9 +17,9 @@ namespace Todo.Infrastructure.Repositories.DB;
 public class AccountRepository : IAccountRepository
 {
     /// <summary>
-    ///     UserManager instance to manage user operations.
+    ///     TodoIdentityContext instance to manage user operations.
     /// </summary>
-    private readonly UserManager<User> _userManager;
+    private readonly TodoDbContext _context;
 
     /// <summary>
     ///     ILogger instance to log information, warnings, and errors.
@@ -26,17 +29,43 @@ public class AccountRepository : IAccountRepository
     /// <summary>
     ///     Constructor of AccountService class.
     /// </summary>
-    /// <param name="userManager">
-    ///     UserManager instance to manage user operations, it's injected by dependency injection container.
-    /// </param>
     /// <param name="logger">
     ///    ILogger instance to log information, warnings, and errors, it's injected by dependency injection container.
     ///    It's used to log information, warnings, and errors.
     /// </param>
-    public AccountRepository(UserManager<User> userManager, ILogger<AccountRepository> logger)
+    /// <param name="context">
+    ///     TodoIdentityContext instance to manage user operations, it's injected by dependency injection container.
+    /// </param>
+    public AccountRepository(ILogger<AccountRepository> logger, TodoDbContext context)
     {
-        _userManager = userManager;
         _logger = logger;
+        _context = context;
+    }
+
+    /// <summary>
+    ///     RegisterNewUser method is used to register a new user.
+    /// </summary>
+    /// <param name="registerUserDto">
+    ///     RegisterUserDto instance that contains user's information like first name, last name, email, username, and firebase id.
+    /// </param>
+    /// <returns>
+    ///     Returns the registered user.
+    /// </returns>
+    public async Task<User> RegisterNewUser(RegisterUserDto registerUserDto)
+    {
+        var user = new User
+        {
+            Id = registerUserDto.Id,
+            UserName = registerUserDto.Username,
+            Email = registerUserDto.Email,
+            FirstName = registerUserDto.FirstName,
+            LastName = registerUserDto.LastName
+        };
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("New user registered successfully!");
+        return user;
     }
 
     /// <summary>
@@ -53,10 +82,10 @@ public class AccountRepository : IAccountRepository
     /// </exception>
     public async Task<User> GetUserById(string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId) ??
-                   throw new UserNotFoundException($"User with this id: {userId} not found");
+        var user = await _context.Users.FindAsync(userId) ??
+            throw new UserNotFoundException($"User with this id: {userId} not found");
 
-        _logger.LogInformation("User with id: {userId} found successfully.", userId);
+        _logger.LogInformation("User found successfully.");
         return user;
     }
 
@@ -80,39 +109,10 @@ public class AccountRepository : IAccountRepository
         var userEmail = claims.FindFirst(ClaimTypes.Email)?.Value ??
                         throw new UnauthorizedAccessException("User not authenticated.");
 
-        var user = await _userManager.FindByEmailAsync(userEmail) ??
-            throw new UserNotFoundException($"User with this email: {userEmail} not found");
+        var user = await _context.Users.Where(u => u.Email == userEmail).FirstAsync();
 
         _logger.LogInformation("User with email: {userEmail} found successfully.", userEmail);
         return user;
-    }
-
-    /// <summary>
-    ///     ChangePassword method is used to change user's password.
-    /// </summary>
-    /// <param name="changePasswordDto">
-    ///     ChangePasswordDto instance that contains user's id, current password and new password.
-    /// </param>
-    /// <returns>
-    ///     Returns true if password changed successfully.
-    /// </returns>
-    /// <exception cref="UserNotFoundException">
-    ///     Throws when user not found by given id.
-    /// </exception>
-    /// <exception cref="PasswordDidNotChangeException">
-    ///     Throws when password did not change successfully.
-    /// </exception>
-    public async Task ChangePassword(ChangePasswordDto changePasswordDto)
-    {
-        var user = await GetUserById(changePasswordDto.Id);
-
-        var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword,
-                changePasswordDto.NewPassword);
-        if (!result.Succeeded)
-            throw new PasswordDidNotChangeException($"Failed to change password because of: {string.Join(", ",
-                result.Errors.Select(e => e.Description))}");
-
-        _logger.LogInformation("Password changed successfully for user with username: {username}", user.Username);
     }
 
     /// <summary>
@@ -140,22 +140,30 @@ public class AccountRepository : IAccountRepository
 
         UpdateUserInformation(user, updateUserInfoDto);
 
-        var result = await _userManager.UpdateAsync(user);
-        if (!result.Succeeded)
-            throw new UserInformationDidNotUpdateException($"Failed to update user information because of: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
 
-        _logger.LogInformation("User information updated successfully for user with id: {updateUserInfoDto.Id}", updateUserInfoDto.Id);
+        _logger.LogInformation("User information updated successfully!");
         return new UserDto
         {
             Id = user.Id,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Email = user.Email ?? throw new UserInformationDidNotUpdateException("Email is required."),
-            UserName = user.Username ?? throw new UserInformationDidNotUpdateException("Username is required."),
+            Email = user.Email,
+            UserName = user.UserName,
             PhoneNumber = user.PhoneNumber
         };
     }
 
+    /// <summary>
+    ///     UpdateUserInformation method is a helper method used to update user information.
+    /// </summary>
+    /// <param name="user">
+    ///     The user to update information.
+    /// </param>
+    /// <param name="updateUserInfoDto">
+    ///     UpdateUserInfoDto instance that contains user's id and new information.
+    /// </param>
     private static void UpdateUserInformation(User user, UpdateUserInfoDto updateUserInfoDto)
     {
         // Update the user's first name if it's provided
@@ -172,7 +180,7 @@ public class AccountRepository : IAccountRepository
 
         // Update the user's username if it's provided
         if (!string.IsNullOrEmpty(updateUserInfoDto.NewUserName))
-            user.Username = updateUserInfoDto.NewUserName;
+            user.UserName = updateUserInfoDto.NewUserName;
 
         user.PhoneNumber = updateUserInfoDto.NewPhoneNumber;
     }
@@ -193,7 +201,8 @@ public class AccountRepository : IAccountRepository
     public async Task DeleteAccount(string id)
     {
         var user = await GetUserById(id);
-        await _userManager.DeleteAsync(user);
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
         _logger.LogInformation("User account deleted successfully for user with id: {id}", id);
     }
 }

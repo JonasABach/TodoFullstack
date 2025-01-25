@@ -1,40 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <PropertyGroup>
-      <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+        <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="../Todo.Data/Todo.Data.csproj" />
-      <ProjectReference Include="..\Todo.Core\Todo.Core.csproj" />
+        <ProjectReference Include="../Todo.Data/Todo.Data.csproj"/>
+        <ProjectReference Include="..\Todo.Core\Todo.Core.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FirebaseAdmin" Version="3.1.0" />
-      <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
-      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.11" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-      <PackageReference Include="StackExchange.Redis" Version="2.8.24" />
+        <PackageReference Include="FirebaseAdmin"/>
+        <PackageReference Include="FirebaseAuthentication.net"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+        <PackageReference Include="StackExchange.Redis"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.IdentityModel.Tokens">
-        <HintPath>..\..\..\.nuget\packages\microsoft.identitymodel.tokens\7.1.2\lib\net8.0\Microsoft.IdentityModel.Tokens.dll</HintPath>
-      </Reference>
-      <Reference Include="System.IdentityModel.Tokens.Jwt">
-        <HintPath>..\..\..\.nuget\packages\system.identitymodel.tokens.jwt\7.1.2\lib\net8.0\System.IdentityModel.Tokens.Jwt.dll</HintPath>
-      </Reference>
+        <Reference Include="Microsoft.IdentityModel.Tokens">
+            <HintPath>..\..\..\.nuget\packages\microsoft.identitymodel.tokens\7.1.2\lib\net8.0\Microsoft.IdentityModel.Tokens.dll</HintPath>
+        </Reference>
+        <Reference Include="System.IdentityModel.Tokens.Jwt">
+            <HintPath>..\..\..\.nuget\packages\system.identitymodel.tokens.jwt\7.1.2\lib\net8.0\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

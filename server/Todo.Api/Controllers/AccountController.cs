@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Core.DTOs.AccountDTOs;
+using Todo.Core.DTOs.AuthDTOs;
 using Todo.Core.Exceptions;
 using Todo.Core.Interfaces;
 
@@ -23,10 +24,23 @@ namespace Todo.Api.Controllers;
 public class AccountController(
     IAccountRepository accountRepository,
     ILogger<AccountController> logger,
-    IValidator<ChangePasswordDto> changePasswordValidator,
+    IValidator<RegisterUserDto> registerUserValidator,
     IValidator<UpdateUserInfoDto> updateUserInfoValidator
     ) : ControllerBase
 {
+
+    [HttpPost("register-new-user")]
+    public async Task<IActionResult> RegisterNewUser([FromBody] RegisterUserDto registerUserDto)
+    {
+        var validationResult = await registerUserValidator.ValidateAsync(registerUserDto);
+        if (!validationResult.IsValid)
+            throw new InvalidModelStateException(validationResult.ToString());
+
+        var user = await accountRepository.RegisterNewUser(registerUserDto);
+
+        logger.LogInformation("User registered successfully with id: {id}", user.Id);
+        return Ok(user);
+    }
 
     /// <summary>
     ///     Endpoint for getting the information of the authenticated user.
@@ -45,41 +59,16 @@ public class AccountController(
         if (string.IsNullOrEmpty(id))
             throw new InvalidModelStateException("User Id is required");
         var userInfo = await accountRepository.GetUserById(id);
-        var userDto = new UserDto
+        logger.LogInformation("User information retrieved successfully for the user");
+        return Ok(new UserDto
         {
             Id = userInfo.Id,
             FirstName = userInfo.FirstName,
             LastName = userInfo.LastName,
             Email = userInfo.Email,
-            UserName = userInfo.Username,
+            UserName = userInfo.UserName,
             PhoneNumber = userInfo.PhoneNumber
-        };
-        logger.LogInformation("User information retrieved successfully for user with id: {id}", userInfo.Id);
-        return Ok(userDto);
-    }
-
-    /// <summary>
-    ///     Endpoint for changing the password of the authenticated user.
-    /// </summary>
-    /// <param name="changePasswordDto">
-    ///     The credentials to use for changing the password (id, current password and new password).
-    /// </param>
-    /// <returns>
-    ///     An IActionResult representing the result of the password change.
-    ///     returns BadRequest if the ModelState is invalid or an exception is thrown,
-    ///     otherwise returns Ok with a success message.
-    /// </returns>
-    [HttpPut("change-password")]
-    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
-    {
-        var validationResult = await changePasswordValidator.ValidateAsync(changePasswordDto);
-        if (!validationResult.IsValid)
-            throw new InvalidModelStateException(validationResult.ToString());
-
-        await accountRepository.ChangePassword(changePasswordDto);
-
-        logger.LogInformation("Password changed successfully for user with id: {id}", changePasswordDto.Id);
-        return Ok("Password changed successfully.");
+        });
     }
 
     /// <summary>

@@ -1,0 +1,3 @@
+# CA2007: Do not directly await a Task in Main
+[*.{cs,vb}]
+dotnet_diagnostic.CA2007.severity = none

@@ -9,6 +9,7 @@ services:
       TrustServerCertificate: "true"
     volumes:
     - "todo-sqlserver-data:/var/opt/mssql"
+    - "todo-sqlserver-error-logs:/var/opt/mssql/log/errorlog"
     ports:
     - target: 1433
       published: 4000
@@ -45,4 +46,10 @@ services:
     restart: unless-stopped
 volumes:
   todo-sqlserver-data: {}
+  todo-sqlserver-error-logs: {}
   todo-redis-data: {}
+
+networks:
+  todo-network:
+    driver: bridge
+    name: "todo-network"

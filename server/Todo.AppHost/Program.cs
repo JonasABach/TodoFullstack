@@ -5,6 +5,7 @@ var sqlServer = builder
     .WithImage("mssql/server", "2022-latest")
     .WithContainerName("todo-sqlserver")
     .WithDataVolume("todo-sqlserver-data")
+    .WithEnvironment("MSSQL_SA_PASSWORD", "Password123")
     .WithEnvironment("ACCEPT_EULA", "Y")
     .WithEnvironment("MSSQL_PID", "Developer")
     .WithLifetime(ContainerLifetime.Persistent);
@@ -27,4 +28,4 @@ builder.AddProject<Projects.Todo_Api>("TodoApi", launchProfileName: "https")
     .WaitFor(redis)
     .WithExternalHttpEndpoints();
 
-builder.Build().Run();
+await builder.Build().RunAsync().ConfigureAwait(true);

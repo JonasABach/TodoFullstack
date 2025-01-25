@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Todo.Core.DTOs.AccountDTOs;
+using Todo.Core.DTOs.AuthDTOs;
 using Todo.Core.Entities;
 using Task = System.Threading.Tasks.Task;
 
@@ -11,6 +12,17 @@ namespace Todo.Core.Interfaces;
 /// </summary>
 public interface IAccountRepository
 {
+    /// <summary>
+    ///     RegisterNewUser method is used to register a new user.
+    /// </summary>
+    /// <param name="registerUserDto">
+    ///     RegisterUserDto instance that contains user's information like first name, last name, email, username, and firebase id.
+    /// </param>
+    /// <returns>
+    ///     Returns the registered user.
+    /// </returns>
+    Task<User> RegisterNewUser(RegisterUserDto registerUserDto);
+
     /// <summary>
     ///    GetUserById method is used to get user by id.
     /// </summary>
@@ -32,17 +44,6 @@ public interface IAccountRepository
     ///     Returns the user with the provided claims.
     /// </returns>
     Task<User> GetUserByClaims(ClaimsPrincipal claims);
-
-    /// <summary>
-    ///     ChangePassword method is used to change user's password.
-    /// </summary>
-    /// <param name="changePasswordDto">
-    ///     ChangePasswordDto instance that contains user's id, current password and new password.
-    /// </param>
-    /// <returns>
-    ///     Returns true if password changed successfully.
-    /// </returns>
-    Task ChangePassword(ChangePasswordDto changePasswordDto);
 
     /// <summary>
     ///     UpdateUserInfo method is used to update user's information like first name, last name, email, username, and phone number.

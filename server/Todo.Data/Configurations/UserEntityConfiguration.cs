@@ -17,32 +17,37 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(user => user.Id);
 
-        builder.Property(user => user.Email)
-            .IsRequired(true);
+        builder.HasIndex(user => user.Id);
 
-        builder.Property(user => user.Username)
-            .IsRequired(true);
+        builder.Property(user => user.Id)
+            .IsRequired()
+            .HasMaxLength(64);
+
+        builder.Property(user => user.Email)
+            .IsRequired()
+            .HasMaxLength(256);
+
+        builder.HasIndex(user => user.Email);
+
+        builder.Property(user => user.UserName)
+            .IsRequired()
+            .HasMaxLength(256);
 
         builder.Property(user => user.PhoneNumber)
-            .IsRequired(false);
+            .IsRequired(false)
+            .HasMaxLength(17);
 
         builder.Property(user => user.FirstName)
             .IsRequired()
-            .HasMaxLength(25);
+            .HasMaxLength(128);
 
         builder.Property(user => user.LastName)
             .IsRequired()
-            .HasMaxLength(25);
+            .HasMaxLength(128);
 
         builder.HasMany(user => user.Lists)
             .WithOne(list => list.User)
             .HasForeignKey(list => list.UserId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Property(user => user.RefreshTokenId)
-            .IsRequired(false);
-
-        builder.HasIndex(user => user.RefreshTokenId)
-            .IsUnique();
     }
 }

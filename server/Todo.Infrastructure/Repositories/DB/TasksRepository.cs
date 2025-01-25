@@ -16,15 +16,15 @@ public class TasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
     /// <summary>
     ///     The database context for the Identity database.
     /// </summary>
-    private readonly TodoIdentityContext _identityContext;
+    private readonly TodoDbContext _dbContext;
 
     /// <summary>
     ///     Initializes a new instance of the TasksRepository class.
     /// </summary>
-    /// <param name="identityContext">
+    /// <param name="dbContext">
     ///     The database context for the Identity database.
     /// </param>
-    public TasksRepository(TodoIdentityContext identityContext) => _identityContext = identityContext;
+    public TasksRepository(TodoDbContext dbContext) => _dbContext = dbContext;
 
     /// <summary>
     ///     Gets all the Tasks from the database that belong to the specified List.
@@ -43,7 +43,7 @@ public class TasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
         if (!Guid.TryParse(id, out var guidId))
             throw new ArgumentException("The specified ID is not a valid GUID.");
 
-        return await _identityContext.Tasks
+        return await _dbContext.Tasks
             .AsNoTracking()
             .Where(l => l.ListId == guidId)
             .ToListAsync();
@@ -60,7 +60,7 @@ public class TasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
     /// </returns>
     public Task<TaskItem> GetByIdAsync(Guid id)
     {
-        return _identityContext.Tasks
+        return _dbContext.Tasks
             .AsNoTracking()
             .Where(l => l.Id == id)
             .FirstAsync();
@@ -80,7 +80,7 @@ public class TasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
     /// </exception>
     public async Task<TaskItem> AddAsync(AddTaskDto dto)
     {
-        _ = await _identityContext.Lists
+        _ = await _dbContext.Lists
                 .Where(l => l.Id == dto.ListId)
                 .FirstAsync() ??
             throw new ListNotFoundException($"List with the specified ID: {dto.ListId} not found.");
@@ -94,8 +94,8 @@ public class TasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
             ListId = dto.ListId
         };
 
-        _identityContext.Tasks.Add(task); // Add the new Task to the database context.
-        await _identityContext.SaveChangesAsync(); // Save the changes to the database.
+        _dbContext.Tasks.Add(task); // Add the new Task to the database context.
+        await _dbContext.SaveChangesAsync(); // Save the changes to the database.
         return task;
     }
 
@@ -113,15 +113,15 @@ public class TasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
     /// </exception>
     public async Task<TaskItem> UpdateAsync(UpdateTaskDto entity)
     {
-        var task = await _identityContext.Tasks
+        var task = await _dbContext.Tasks
                        .Where(l => l.Id == entity.Id)
                        .FirstAsync() ??
                    throw new TaskNotFoundException($"Task with the specified ID: {entity.Id} not found.");
 
         task = UpdateEntity(task, entity); // Update the Task entity with the new data.
 
-        _identityContext.Tasks.Update(task); // Update the list in the database context.
-        await _identityContext.SaveChangesAsync(); // Save the changes to the database.
+        _dbContext.Tasks.Update(task); // Update the list in the database context.
+        await _dbContext.SaveChangesAsync(); // Save the changes to the database.
         return task;
     }
 
@@ -162,12 +162,12 @@ public class TasksRepository : IRepository<TaskItem, AddTaskDto, UpdateTaskDto>
     /// </exception>
     public async Task DeleteAsync(Guid id)
     {
-        var task = await _identityContext.Tasks
+        var task = await _dbContext.Tasks
                        .Where(l => l.Id == id)
                        .FirstAsync() ??
                    throw new TaskNotFoundException($"Task with the specified ID: {id} not found.");
 
-        _identityContext.Tasks.Remove(task);
-        await _identityContext.SaveChangesAsync();
+        _dbContext.Tasks.Remove(task);
+        await _dbContext.SaveChangesAsync();
     }
 }

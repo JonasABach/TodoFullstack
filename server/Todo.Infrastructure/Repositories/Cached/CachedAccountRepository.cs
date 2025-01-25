@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Todo.Core.DTOs.AccountDTOs;
+using Todo.Core.DTOs.AuthDTOs;
 using Todo.Core.Entities;
 using Todo.Core.Interfaces;
 using Todo.Infrastructure.Repositories.DB;
@@ -23,6 +24,8 @@ public class CachedAccountRepository : IAccountRepository
         _cacheService = cacheService;
     }
 
+    public async Task<User> RegisterNewUser(RegisterUserDto registerUserDto) => await _accountRepository.RegisterNewUser(registerUserDto);
+
     public async Task<User> GetUserById(string userId)
     {
         var cacheKey = $"User-{userId}";
@@ -40,13 +43,6 @@ public class CachedAccountRepository : IAccountRepository
         var userId = claims.FindFirst(JwtRegisteredClaimNames.Jti)?.Value ??
                      throw new UnauthorizedAccessException("User not authenticated.");
         return await GetUserById(userId);
-    }
-
-    public async Task ChangePassword(ChangePasswordDto changePasswordDto)
-    {
-        await _accountRepository.ChangePassword(changePasswordDto);
-        await _cacheService.UpdateData($"User-{changePasswordDto.Id}",
-            await _accountRepository.GetUserById(changePasswordDto.Id));
     }
 
     public async Task<UserDto> UpdateUserInfo(UpdateUserInfoDto updateUserInfoDto)

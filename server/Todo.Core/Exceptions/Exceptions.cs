@@ -103,3 +103,11 @@ public class UserNotFoundException(string message) : Exception(message);
 ///    The message to display when the exception is thrown.
 /// </param>
 public class FirebaseTokenValidationException(string message, Exception ex) : Exception(message);
+
+/// <summary>
+///     Exception thrown when the user is not updated in the database.
+/// </summary>
+/// <param name="message">
+///     The message to display when the exception is thrown.
+/// </param>
+public class BadRequestException(string message) : Exception(message);

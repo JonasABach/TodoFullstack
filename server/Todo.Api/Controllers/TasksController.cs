@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Core.DTOs.TasksDtos;
+using Todo.Core.Entities;
 using Todo.Core.Exceptions;
 using Todo.Core.Interfaces;
-using Entity_Task = Todo.Core.Entities.TaskI;
 
 namespace Todo.Api.Controllers;
 
@@ -23,7 +23,7 @@ namespace Todo.Api.Controllers;
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class TasksController(
-    IRepository<Entity_Task, AddTaskDto, UpdateTaskDto> taskRepository,
+    IRepository<TaskItem, AddTaskDto, UpdateTaskDto> taskRepository,
     ILogger<TasksController> logger,
     IValidator<AddTaskDto> addTaskValidator,
     IValidator<UpdateTaskDto> updateTaskValidator) : ControllerBase
@@ -41,7 +41,7 @@ public class TasksController(
     ///     If an error occurs, a bad request is returned with the error message.
     /// </returns>
     [HttpGet("all-tasks/{listId}")]
-    public async Task<ActionResult<List<Entity_Task>>> GetAllTasksByListId([FromRoute] string listId)
+    public async Task<ActionResult<List<TaskItem>>> GetAllTasksByListId([FromRoute] string listId)
     {
         if (string.IsNullOrEmpty(listId))
             throw new InvalidModelStateException("List ID cannot be null or empty.");
@@ -63,7 +63,7 @@ public class TasksController(
     ///     If an error occurs, a bad request is returned with the error message.
     /// </returns>
     [HttpGet("get-task/{id}")]
-    public async Task<ActionResult<Entity_Task>> GetTaskById(Guid id)
+    public async Task<ActionResult<TaskItem>> GetTaskById(Guid id)
     {
         if (id == Guid.Empty)
             throw new InvalidModelStateException("Task ID cannot be null or empty.");
@@ -84,7 +84,7 @@ public class TasksController(
     ///     If an error occurs, a bad request is returned with the error message.
     /// </returns>
     [HttpPost("add-task")]
-    public async Task<ActionResult<Entity_Task>> AddTask([FromBody] AddTaskDto addTaskDto)
+    public async Task<ActionResult<TaskItem>> AddTask([FromBody] AddTaskDto addTaskDto)
     {
         var validationResult = await addTaskValidator.ValidateAsync(addTaskDto);
         if (!validationResult.IsValid)
@@ -106,7 +106,7 @@ public class TasksController(
     ///     The updated task.
     /// </returns>
     [HttpPut("update-task")]
-    public async Task<ActionResult<Entity_Task>> UpdateTask([FromBody] UpdateTaskDto updateTaskDto)
+    public async Task<ActionResult<TaskItem>> UpdateTask([FromBody] UpdateTaskDto updateTaskDto)
     {
         var validationResult = await updateTaskValidator.ValidateAsync(updateTaskDto);
         if (!validationResult.IsValid)

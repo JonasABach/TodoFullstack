@@ -3,7 +3,7 @@ using Todo.Data.DatabaseContexts;
 
 namespace Todo.Api.Configurations;
 
-public static class StartupApplicationConfiguration
+internal static class StartupApplicationConfiguration
 {
     /// <summary>
     ///     Automatically migrates the database at startup.
@@ -11,19 +11,19 @@ public static class StartupApplicationConfiguration
     /// <param name="app">
     ///     The WebApplication instance to use for the migration.
     /// </param>
-    public static async void UseAutoMigrationAtStartup(this WebApplication app)
+    private static async Task UseAutoMigrationAtStartup(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
         var logger = services.GetRequiredService<ILogger<Program>>();
         try
         {
-            var dbContext = services.GetRequiredService<TodoIdentityContext>();
-            await dbContext.Database.MigrateAsync();
+            var dbContext = services.GetRequiredService<TodoDbContext>();
+            await dbContext.Database.MigrateAsync().ConfigureAwait(true);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "This error occurred while migrating the database {Error}", e.Message);
+            Log.DatabaseMigrationError(logger, e);
         }
     }
 
@@ -33,11 +33,11 @@ public static class StartupApplicationConfiguration
     /// <param name="app">
     ///     The WebApplication instance to configure.
     /// </param>
-    public static void DevelopmentMode(this WebApplication app)
+    public static async Task DevelopmentMode(this WebApplication app)
     {
         app.UseDeveloperExceptionPage();
         app.UseCors(Constants.ClientCrossOriginPolicyDevName);
-        app.UseAutoMigrationAtStartup();
+        await app.UseAutoMigrationAtStartup().ConfigureAwait(true);
     }
 
     /// <summary>
@@ -50,5 +50,21 @@ public static class StartupApplicationConfiguration
     {
         app.UseExceptionHandler("/error");
         app.UseCors(Constants.ClientCrossOriginPolicyProductionName);
+    }
+
+    /// <summary>
+    ///     Configures the application to Generate API documentation.
+    /// </summary>
+    /// <param name="app">
+    ///     The WebApplication instance to configure.
+    /// </param>
+    public static void AddDocsGeneration(this WebApplication app)
+    {
+        app.MapOpenApi();
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/openapi/v1.json", "Todo API");
+        });
     }
 }

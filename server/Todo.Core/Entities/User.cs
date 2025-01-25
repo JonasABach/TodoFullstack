@@ -10,22 +10,24 @@ namespace Todo.Core.Entities;
 public class User
 {
     /// <summary>
-    ///     This is the id of the user.
+    ///     The unique identifier of the user entity retrieved from the 3rd party authentication service provider.
     /// </summary>
     [Key]
+    [StringLength(64)]
     public string Id { get; set; }
 
     /// <summary>
     ///     The email of the user.
     /// </summary>
     [Required]
+    [StringLength(255, MinimumLength = 3)]
     public string Email { get; set; }
 
     /// <summary>
     ///     The username of the user.
     /// </summary>
     [Required]
-    public string Username { get; set; }
+    public string UserName { get; set; }
 
     /// <summary>
     ///     The phone number of the user.
@@ -60,19 +62,4 @@ public class User
     ///     A TaskList can only belong to one user.
     /// </summary>
     public List<TaskList> Lists { get; set; } = [];
-
-    /// <summary>
-    ///     The Id of the refresh token of the user.
-    ///     Used for refreshing the access token.
-    /// </summary>
-    public Guid? RefreshTokenId { get; set; }
-
-    /// <summary>
-    ///     The refresh token of the user.
-    ///     Used for refreshing the access token.
-    ///     A user can have only one refresh token.
-    ///     A refresh token can only belong to one user.
-    ///     This is a navigation property.
-    /// </summary>
-    public virtual RefreshToken? RefreshToken { get; set; }
 }

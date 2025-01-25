@@ -10,7 +10,7 @@ namespace Todo.Data.DatabaseContexts;
 /// <param name="options">
 ///     The options to be passed to the base class.
 /// </param>
-public class TodoIdentityContext(DbContextOptions<TodoIdentityContext> options) : DbContext(options)
+public class TodoDbContext(DbContextOptions<TodoDbContext> options) : DbContext(options)
 {
     /// <summary>
     ///     The DbSet for the User model in the database.
@@ -28,11 +28,6 @@ public class TodoIdentityContext(DbContextOptions<TodoIdentityContext> options) 
     public DbSet<TaskList> Lists { get; init; }
 
     /// <summary>
-    ///     The DbSet for the RefreshToken model in the database.
-    /// </summary>
-    public DbSet<RefreshToken> RefreshTokens { get; init; }
-
-    /// <summary>
     ///     The OnModelCreating method that is called when the model is being created.
     /// </summary>
     /// <param name="modelBuilder">
@@ -45,6 +40,5 @@ public class TodoIdentityContext(DbContextOptions<TodoIdentityContext> options) 
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         modelBuilder.ApplyConfiguration(new TaskListEntityConfiguration());
         modelBuilder.ApplyConfiguration(new TaskEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new RefreshTokenEntityConfiguration());
     }
 }
