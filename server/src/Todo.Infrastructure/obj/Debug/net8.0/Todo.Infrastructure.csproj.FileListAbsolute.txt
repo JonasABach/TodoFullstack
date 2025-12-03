@@ -1,0 +1,17 @@
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\bin\Debug\net8.0\Todo.Infrastructure.deps.json
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\bin\Debug\net8.0\Todo.Infrastructure.dll
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\bin\Debug\net8.0\Todo.Infrastructure.pdb
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\bin\Debug\net8.0\Todo.Core.dll
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\bin\Debug\net8.0\Todo.Core.pdb
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\bin\Debug\net8.0\Todo.Core.xml
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Infrastructure.AssemblyInfo.cs
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Infrastructure.sourcelink.json
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Inf.6F6EFB04.Up2Date
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Infrastructure.dll
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\refint\Todo.Infrastructure.dll
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\Todo.Infrastructure.pdb
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Infrastructure\obj\Debug\net8.0\ref\Todo.Infrastructure.dll

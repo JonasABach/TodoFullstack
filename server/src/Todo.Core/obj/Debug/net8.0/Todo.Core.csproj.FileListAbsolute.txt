@@ -1,0 +1,14 @@
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\bin\Debug\net8.0\Todo.Core.xml
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\bin\Debug\net8.0\Todo.Core.deps.json
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\bin\Debug\net8.0\Todo.Core.dll
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\bin\Debug\net8.0\Todo.Core.pdb
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\Todo.Core.csproj.AssemblyReference.cache
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\Todo.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\Todo.Core.AssemblyInfoInputs.cache
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\Todo.Core.AssemblyInfo.cs
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\Todo.Core.csproj.CoreCompileInputs.cache
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\Todo.Core.sourcelink.json
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\Todo.Core.dll
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\refint\Todo.Core.dll
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\Todo.Core.pdb
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Core\obj\Debug\net8.0\ref\Todo.Core.dll

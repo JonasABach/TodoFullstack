@@ -1,0 +1,1106 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Todo.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Todo.Core.Configurations.RefreshTokenEntityConfiguration">
+            <summary>
+                Configuration for the RefreshToken entity.
+                - Defines the database schema for the RefreshToken entity.
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Configurations.RefreshTokenEntityConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{Todo.Core.Entities.RefreshToken})">
+            <summary>
+                Configures the RefreshToken entity's properties, relationships, and indexes.
+            </summary>
+            <param name="builder">The builder to use to configure the RefreshToken entity. </param>
+        </member>
+        <member name="T:Todo.Core.Configurations.TaskEntityConfiguration">
+            <summary>
+                The entity configuration for the Task entity.
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Configurations.TaskEntityConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{Todo.Core.Entities.Task})">
+            <summary>
+                Configures the entity of type Task.
+            </summary>
+            <param name="builder"> The builder to be used to configure the entity. </param>
+        </member>
+        <member name="T:Todo.Core.Configurations.TaskListEntityConfiguration">
+            <summary>
+                The entity configuration for the TaskList entity.
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Configurations.TaskListEntityConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{Todo.Core.Entities.TaskList})">
+            <summary>
+                Configures the entity of type Task.
+            </summary>
+            <param name="builder"> The builder to be used to configure the entity. </param>
+        </member>
+        <member name="T:Todo.Core.Configurations.UserEntityConfiguration">
+            <summary>
+                The entity configuration for the User entity.
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Configurations.UserEntityConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{Todo.Core.Entities.User})">
+            <summary>
+                Configures the entity of type Task.
+            </summary>
+            <param name="builder"> The builder to be used to configure the entity. </param>
+        </member>
+        <member name="T:Todo.Core.DTOs.AccountDTOs.ChangePasswordDto">
+            <summary>
+                Data transfer object for changing a user's password.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.ChangePasswordDto.Id">
+            <summary>
+                The user's unique identifier.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.ChangePasswordDto.CurrentPassword">
+            <summary>
+                The user's current password.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.ChangePasswordDto.NewPassword">
+            <summary>
+                The user's new password.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.AccountDTOs.UpdateUserInfoDto">
+            <summary>
+                DTO for updating user information.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UpdateUserInfoDto.Id">
+            <summary>
+                The user's id.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UpdateUserInfoDto.NewFirstName">
+            <summary>
+                The user's first name.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UpdateUserInfoDto.NewLastName">
+            <summary>
+                The user's last name.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UpdateUserInfoDto.NewEmail">
+            <summary>
+                The user's email.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UpdateUserInfoDto.NewUserName">
+            <summary>
+                The user's username.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UpdateUserInfoDto.NewPhoneNumber">
+            <summary>
+                The user's phone number.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.AccountDTOs.UserDto">
+            <summary>
+              The user data that is returned to the client.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UserDto.Id">
+            <summary>
+                The id of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UserDto.FirstName">
+            <summary>
+                The first name of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UserDto.LastName">
+            <summary>
+                The last name of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UserDto.Email">
+            <summary>
+                The email of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UserDto.UserName">
+            <summary>
+                The username of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AccountDTOs.UserDto.PhoneNumber">
+            <summary>
+                The phone number of the user.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.AuthDTOs.AccessTokenDto">
+            <summary>
+                Access token data transfer object.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.AccessTokenDto.UserId">
+            <summary>
+                User id.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.AccessTokenDto.AccessToken">
+            <summary>
+                Access token.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.AccessTokenDto.AccessTokenExpirationDate">
+            <summary>
+                Access token expiration date.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.AuthDTOs.AuthResponse">
+            <summary>
+                Represents the response of the authentication process.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.AuthResponse.UserId">
+            <summary>
+                The user's id.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.AuthResponse.AccessToken">
+            <summary>
+                The access token that will be used to authenticate the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.AuthResponse.AccessTokenExpirationDate">
+            <summary>
+                The expiration date of the access token.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.AuthResponse.RefreshToken">
+            <summary>
+                The refresh token that will be used to refresh the access token.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.AuthResponse.RefreshTokenExpirationDate">
+            <summary>
+                The expiration date of the refresh token.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.AuthDTOs.LoginUserDto">
+            <summary>
+                Data transfer object for user login.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.LoginUserDto.Email">
+            <summary>
+                Email of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.LoginUserDto.Password">
+            <summary>
+                Password of the user.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.AuthDTOs.RefreshTokenDto">
+            <summary>
+                Data transfer object for refresh token.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.RefreshTokenDto.RefreshToken">
+            <summary>
+                Gets or sets the refresh token.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.RefreshTokenDto.RefreshTokenExpirationDate">
+            <summary>
+                Gets or sets the refresh token expiration date.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.RefreshTokenDto.UserId">
+            <summary>
+                Gets or sets the user ID.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.AuthDTOs.RegisterUserDto">
+            <summary>
+                Data transfer object for registering a new user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.RegisterUserDto.Email">
+            <summary>
+                The email address of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.RegisterUserDto.Username">
+            <summary>
+                The username of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.RegisterUserDto.FirstName">
+            <summary>
+                The first name of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.RegisterUserDto.LastName">
+            <summary>
+                The last name of the user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.AuthDTOs.RegisterUserDto.Password">
+            <summary>
+                The password of the user.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.ListDTOs.AddListDto">
+            <summary>
+                Data transfer object for adding a list.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.AddListDto.Name">
+            <summary>
+                The name of the list.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.AddListDto.Description">
+            <summary>
+                The description of the list.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.AddListDto.UserId">
+            <summary>
+                The user id of the list.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.ListDTOs.ListsDto">
+            <summary>
+              ListsDto to be used for returning lists to the client.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.ListsDto.Id">
+            <summary>
+             Id of the list.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.ListsDto.Name">
+            <summary>
+              Name of the list.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.ListsDto.Description">
+            <summary>
+              Description of the list.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.ListDTOs.UpdateListDto">
+            <summary>
+                Represents the data transfer object for updating a list.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.UpdateListDto.Id">
+            <summary>
+                The unique identifier of the list.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.UpdateListDto.Name">
+            <summary>
+                The name of the list.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.ListDTOs.UpdateListDto.Description">
+            <summary>
+                The description of the list.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.TasksDtos.AddTaskDto">
+            <summary>
+                Data transfer object for adding a task.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.AddTaskDto.Name">
+            <summary>
+                The name of the task.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.AddTaskDto.Description">
+            <summary>
+                The description of the task.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.AddTaskDto.Priority">
+            <summary>
+                The priority of the task.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.AddTaskDto.ListId">
+            <summary>
+                The status of the task.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.DTOs.TasksDtos.UpdateTaskDto">
+            <summary>
+                Represents the data transfer object for updating a task.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.UpdateTaskDto.Id">
+            <summary>
+                Gets or sets the task identifier.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.UpdateTaskDto.Name">
+            <summary>
+                Gets or sets the task name.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.UpdateTaskDto.Description">
+            <summary>
+                Gets or sets the task description.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.UpdateTaskDto.Priority">
+            <summary>
+                Gets or sets the task priority.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.DTOs.TasksDtos.UpdateTaskDto.IsCompleted">
+            <summary>
+                Gets or sets the task status.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.Entities.RefreshToken">
+            <summary>
+                Entity representing a refresh token in the system.
+              - Refresh tokens are used to obtain new access tokens when the current one expires.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.RefreshToken.Id">
+            <summary>
+                The unique identifier of the refresh token.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.RefreshToken.Token">
+            <summary>
+                The refresh token value.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.RefreshToken.ExpirationDate">
+            <summary>
+                The expiration date of the refresh token.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.RefreshToken.UserId">
+            <summary>
+                A foreign key to the user that the refresh token belongs to.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.RefreshToken.User">
+            <summary>
+                A navigation property to the user that the refresh token belongs to.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.Entities.Task">
+            <summary>
+                The entity that represents a task in the database.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.Task.Id">
+            <summary>
+                The unique identifier for the task entity, the primary key,
+                required, auto-generated, and a GUID (Globally Unique Identifier).
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.Task.Name">
+            <summary>
+                The name of the task, required, and a string with a maximum length of 100 characters.
+                The minimum length is 1 character.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.Task.Description">
+            <summary>
+                The description of the task, a string with a maximum length of 500 characters.
+                The description is optional and can be null.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.Task.IsCompleted">
+            <summary>
+                The flag that indicates if the task is completed or not.
+                The default value is false, and it is required.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.Task.Priority">
+            <summary>
+                The priority of the task, optional, and can be null.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.Task.ListId">
+            <summary>
+                The unique identifier of the task list that the task belongs to.
+                The foreign key is required and can be null.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.Task.TaskList">
+            <summary>
+                The navigation property to the task list that the task belongs to.
+                The task list is optional and can be null.
+                The property is not serialized in the JSON response.
+                The property is not mapped to the database.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.Entities.TaskList">
+            <summary>
+                Represents a list of tasks that a user can create.
+                A list can have many tasks.
+                A list belongs to a user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.TaskList.Id">
+            <summary>
+                The unique identifier of the list of tasks, autogenerated, and not null.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.TaskList.Name">
+            <summary>
+                The name of the list of tasks, required, and not null.
+                The name must be between 1 and 100 characters.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.TaskList.Description">
+            <summary>
+                The description of the list of tasks, not required, and can be null.
+                The description must not exceed 200 characters.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.TaskList.Tasks">
+            <summary>
+                The list of tasks that belong to the list of tasks, required, and not null.
+                A list can have many tasks.
+                The list of tasks is initialized as an empty list.
+                The list of tasks is not lazy-loaded, and the tasks are eagerly-loaded.
+                The list is not mapped to the database.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.TaskList.UserId">
+            <summary>
+                The user that the list of tasks belongs to, not required, and can be null.
+                A list belongs to a user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.TaskList.User">
+            <summary>
+                The user that the list of tasks belongs to.
+                This is a navigation property that links the list of tasks to the user.
+                The user is not mapped to the database.
+                The user is not being serialized.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.Entities.User">
+            <summary>
+                Represents a user in the application with a unique Id, Email, and Password.
+                A user has a first and last name, and a list of TaskLists.
+                Inherits from IdentityUser, which provides the Id, Email, and Password properties.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.User.FirstName">
+            <summary>
+                The first name of the user.
+                Required, must be between 3 and 25 characters.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.User.LastName">
+            <summary>
+                The last name of the user.
+                Required, must be between 3 and 25 characters.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.User.Name">
+            <summary>
+                The full name of the user.
+                Computed property that returns the concatenation of the first and last name.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.User.Lists">
+            <summary>
+                The list of TaskLists that the user has.
+                A user can have multiple TaskLists.
+                A TaskList can only belong to one user.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.User.RefreshTokenId">
+            <summary>
+                The Id of the refresh token of the user.
+                Used for refreshing the access token.
+            </summary>
+        </member>
+        <member name="P:Todo.Core.Entities.User.RefreshToken">
+            <summary>
+                The refresh token of the user.
+                Used for refreshing the access token.
+                A user can have only one refresh token.
+                A refresh token can only belong to one user.
+                This is a navigation property.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.Enums.TaskPriority">
+            <summary>
+                Represents the priority of a task.
+            </summary>
+        </member>
+        <member name="F:Todo.Core.Enums.TaskPriority.Urgent">
+            <summary>
+                Represents the highest priority.
+            </summary>
+        </member>
+        <member name="F:Todo.Core.Enums.TaskPriority.High">
+            <summary>
+                Represents a high priority.
+            </summary>
+        </member>
+        <member name="F:Todo.Core.Enums.TaskPriority.Medium">
+            <summary>
+                Represents a medium priority.
+            </summary>
+        </member>
+        <member name="F:Todo.Core.Enums.TaskPriority.Low">
+            <summary>
+                Represents a low priority.
+            </summary>
+        </member>
+        <member name="T:Todo.Core.Exceptions.AddRoleException">
+            <summary>
+                Exception thrown when a role is not added to the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.AddRoleException.#ctor(System.String)">
+            <summary>
+                Exception thrown when a role is not added to the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.InvalidModelStateException">
+            <summary>
+                Exception thrown when the Model State is invalid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.InvalidModelStateException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the Model State is invalid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.InvalidTokenException">
+            <summary>
+                Exception thrown when the token is not valid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.InvalidTokenException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the token is not valid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.CreateUserException">
+            <summary>
+                Exception thrown when a user is not added to the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.CreateUserException.#ctor(System.String)">
+            <summary>
+                Exception thrown when a user is not added to the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.InvalidEmailException">
+            <summary>
+                Exception thrown when the email is not valid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.InvalidEmailException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the email is not valid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.InvalidGuidException">
+            <summary>
+                Exception thrown when the id guid is not valid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.InvalidGuidException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the id guid is not valid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.InvalidPasswordException">
+            <summary>
+                Exception thrown when the password is not valid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.InvalidPasswordException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the password is not valid.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.ListNotFoundException">
+            <summary>
+                Exception thrown when the list is not found in the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.ListNotFoundException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the list is not found in the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.PasswordDidNotChangeException">
+            <summary>
+                Exception thrown when the password is did not change.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.PasswordDidNotChangeException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the password is did not change.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.TaskNotFoundException">
+            <summary>
+                Exception thrown when the task is not found in the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.TaskNotFoundException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the task is not found in the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.UserInformationDidNotUpdateException">
+            <summary>
+                Exception thrown when the user information is not updated in the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.UserInformationDidNotUpdateException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the user information is not updated in the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Exceptions.UserNotFoundException">
+            <summary>
+                Exception thrown when the user is not found in the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="M:Todo.Core.Exceptions.UserNotFoundException.#ctor(System.String)">
+            <summary>
+                Exception thrown when the user is not found in the database.
+            </summary>
+            <param name="message">
+                The message to display when the exception is thrown.
+            </param>
+        </member>
+        <member name="T:Todo.Core.Interfaces.IAccountRepository">
+            <summary>
+                IAccountService interface is used to manage user operations like get user information,
+                changing password, updating user information etc.
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAccountRepository.GetUserById(System.String)">
+            <summary>
+               GetUserById method is used to get user by id.
+            </summary>
+            <param name="userId">
+                The id of the user to get.
+            </param>
+            <returns>
+                Returns the user with the provided id.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAccountRepository.GetUserByClaims(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+                GetUserByClaims method is used to get user by claims.
+            </summary>
+            <param name="claims">
+                ClaimsPrincipal instance that contains user's claims.
+            </param>
+            <returns>
+                Returns the user with the provided claims.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAccountRepository.ChangePassword(Todo.Core.DTOs.AccountDTOs.ChangePasswordDto)">
+            <summary>
+                ChangePassword method is used to change user's password.
+            </summary>
+            <param name="changePasswordDto">
+                ChangePasswordDto instance that contains user's id, current password and new password.
+            </param>
+            <returns>
+                Returns true if password changed successfully.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAccountRepository.UpdateUserInfo(Todo.Core.DTOs.AccountDTOs.UpdateUserInfoDto)">
+            <summary>
+                UpdateUserInfo method is used to update user's information like first name, last name, email, username, and phone number.
+                It updates only the provided properties and keeps the others as they are if they are not provided (null or empty).
+                It does not update the password, to update the password use ChangePassword method.
+                And it does not update the user's id.
+            </summary>
+            <param name="updateUserInfoDto">
+                UpdateUserInfoDto instance that contains user's id and new information.
+                New information can be new first name, new last name, new email, new username, and new phone number.
+            </param>
+            <returns>
+                Returns the updated user information.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAccountRepository.DeleteAccount(System.String)">
+            <summary>
+                DeleteAccount method is used to delete the user account by id.
+            </summary>
+            <param name="id">
+                The id of the user to delete the account.
+            </param>
+            <returns>
+                Returns true if the account deleted successfully.
+            </returns>
+        </member>
+        <member name="T:Todo.Core.Interfaces.IAuthService">
+            <summary>
+            Interface for authentication services.
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAuthService.Register(Todo.Core.DTOs.AuthDTOs.RegisterUserDto)">
+            <summary>
+                Registers a new user with the provided credentials.
+            </summary>
+            <param name="registerUserDto">The data transfer object containing user registration details.</param>
+            <returns>An <see cref="T:Todo.Core.DTOs.AuthDTOs.AuthResponse"/> indicating the result of the registration process.</returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAuthService.Login(Todo.Core.DTOs.AuthDTOs.LoginUserDto)">
+            <summary>
+                Logs in a user with the provided credentials.
+            </summary>
+            <param name="loginUserDto">The data transfer object containing user login details.</param>
+            <returns>An <see cref="T:Todo.Core.DTOs.AuthDTOs.AuthResponse"/> indicating the result of the login process.</returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAuthService.LoginWithRefreshToken(System.String)">
+            <summary>
+                Logs in a user with the provided refresh token.
+            </summary>
+            <param name="refreshToken">The refresh token to use for logging in the user.</param>
+            <returns>An <see cref="T:Todo.Core.DTOs.AuthDTOs.AuthResponse"/> indicating the result of the login process.</returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IAuthService.Logout(System.String)">
+            <summary>
+                Logs out a user with the provided username.
+            </summary>
+            <param name="username">The username of the user to log out.</param>
+            <returns>A task representing the logout process.</returns>
+        </member>
+        <member name="T:Todo.Core.Interfaces.IRedisCacheService">
+            <summary>
+                Interface for Redis Cache Service
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRedisCacheService.GetData``1(System.String)">
+            <summary>
+                Get data from Redis Cache
+            </summary>
+            <param name="key">
+                Key to get data from Redis Cache
+            </param>
+            <typeparam name="T">
+                Type of data to get from Redis Cache
+            </typeparam>
+            <returns>
+                Data from Redis Cache with the given key if exists, otherwise default value of the type
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRedisCacheService.SetData``1(System.String,``0)">
+            <summary>
+                Set data in Redis Cache
+            </summary>
+            <param name="key">
+                Key to set data in Redis Cache
+            </param>
+            <param name="data">
+                Data to set in Redis Cache
+            </param>
+            <typeparam name="T">
+                Type of data to set in Redis Cache
+            </typeparam>
+            <returns>
+                A task that represents the asynchronous operation
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRedisCacheService.UpdateData``1(System.String,``0)">
+            <summary>
+                Update data in Redis Cache
+            </summary>
+            <param name="key">
+                Key to update data in Redis Cache
+            </param>
+            <param name="data">
+                Data to update in Redis Cache
+            </param>
+            <typeparam name="T">
+                Type of data to update in Redis Cache
+            </typeparam>
+            <returns>
+                A task that represents the asynchronous operation, containing the updated data
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRedisCacheService.RemoveData(System.String)">
+            <summary>
+                Remove data from Redis Cache
+            </summary>
+            <param name="key">
+                Key to remove data from Redis Cache
+            </param>
+            <returns>
+                A task that represents the asynchronous operation
+            </returns>
+        </member>
+        <member name="T:Todo.Core.Interfaces.IRefreshTokenRepository">
+            <summary>
+                Interface for the RefreshTokenRepository class.
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRefreshTokenRepository.GetRefreshTokenAsync(System.String)">
+            <summary>
+                Get a refresh token by the token string.
+            </summary>
+            <param name="refreshToken">
+                The refresh token string to use for finding the refresh token.
+            </param>
+            <returns>
+                The refresh token entity for the user if it exists, otherwise null.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRefreshTokenRepository.GetRefreshTokenByUserIdAsync(System.String)">
+            <summary>
+                Get a refresh token by the user ID.
+            </summary>
+            <param name="userId">
+                The user ID to use for finding the refresh token.
+            </param>
+            <returns>
+                The refresh token entity for the user if it exists, otherwise null.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRefreshTokenRepository.GetRefreshTokenByIdAsync(System.Guid)">
+            <summary>
+                Get a refresh token by the token ID.
+            </summary>
+            <param name="refreshTokenId">
+                The refresh token ID to use for finding the refresh token.
+            </param>
+            <returns>
+                The refresh token entity for the user if it exists, otherwise null.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRefreshTokenRepository.AddRefreshTokenAsync(Todo.Core.DTOs.AuthDTOs.RefreshTokenDto)">
+            <summary>
+                Get a refresh token by the token string.
+            </summary>
+            <param name="refreshToken">
+                The refresh token string to use for finding the refresh token.
+            </param>
+            <returns>
+                Void.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRefreshTokenRepository.DeleteRefreshTokenAsync(System.Guid)">
+            <summary>
+                Get a refresh token by the token string.
+            </summary>
+            <param name="refreshTokenId">
+                The refresh token ID to use for finding the refresh token.
+            </param>
+            <returns>
+                Void.
+            </returns>
+        </member>
+        <member name="T:Todo.Core.Interfaces.IRepository`3">
+            <summary>
+                Interface for the repository pattern.
+                This interface is used to define the methods that will be implemented in the repository classes.
+                The repository pattern is used to separate the logic that retrieves the data from the database from the business logic.
+            </summary>
+            <typeparam name="TEntity">
+                This entity will be the model that will be used to interact with the database.
+            </typeparam>
+            <typeparam name="TAddDto">
+                This DTO will be used to validate the data that will be added to the database.
+            </typeparam>
+            <typeparam name="TUpdateDto">
+                This DTO will be used to validate the data that will be updated in the database.
+            </typeparam>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRepository`3.GetAllAsync(System.String)">
+            <summary>
+                This method will return all the entities from the database.
+            </summary>
+            <param name="id">
+                This parameter will be used to filter the entities by a specific id.
+            </param>
+            <returns>
+                A Task that will return an IEnumerable of TEntity.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRepository`3.GetByIdAsync(System.Guid)">
+            <summary>
+                This method will return a specific entity from the database based on the id.
+            </summary>
+            <param name="id">
+                This parameter will be used to filter the entity by a specific id.
+            </param>
+            <returns>
+                A Task that will return a TEntity.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRepository`3.AddAsync(`1)">
+            <summary>
+                This method will add a new entity to the database.
+            </summary>
+            <param name="entity">
+                This parameter will be used to add a new entity to the database.
+            </param>
+            <returns>
+                A Task that will return the added TEntity.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRepository`3.UpdateAsync(`2)">
+            <summary>
+                This method will update an entity in the database.
+            </summary>
+            <param name="entity">
+                This parameter will be used to update an entity in the database.
+            </param>
+            <returns>
+                A Task that will return the updated TEntity.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRepository`3.UpdateEntity(`0,`2)">
+            <summary>
+                This method will update an entity with the data from the DTO.
+            </summary>
+            <param name="entity">
+                This parameter will be used to update an entity in the database.
+            </param>
+            <param name="dto">
+                This parameter will be used to update the entity with the data from the DTO.
+            </param>
+            <returns>
+                The updated TEntity.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.IRepository`3.DeleteAsync(System.Guid)">
+            <summary>
+                This method will delete an entity from the database.
+                The entity will be deleted based on the id.
+            </summary>
+            <param name="id">
+                This parameter will be used to delete an entity from the database.
+            </param>
+            <returns>
+                A Task that will return nothing.
+            </returns>
+        </member>
+        <member name="T:Todo.Core.Interfaces.ITokenService">
+            <summary>
+                Interface for TokenService
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Interfaces.ITokenService.GenerateToken(Todo.Core.Entities.User)">
+            <summary>
+                Generate Token
+            </summary>
+            <param name="user">
+                User object to generate token for.
+            </param>
+            <returns>
+                AccessTokenDto object containing token and expiry date.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.ITokenService.GenerateRefreshToken">
+            <summary>
+                Generate Refresh Token.
+            </summary>
+            <returns>
+                RefreshTokenDto object containing refresh token and expiry date.
+            </returns>
+        </member>
+        <member name="M:Todo.Core.Interfaces.ITokenService.GetPrincipalFromExpiredToken(System.String)">
+            <summary>
+                Get Principal from expired token.
+            </summary>
+            <param name="token">
+                Token to get principal from.
+            </param>
+            <returns>
+                ClaimsPrincipal object.
+            </returns>
+        </member>
+    </members>
+</doc>
