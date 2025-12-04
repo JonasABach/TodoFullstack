@@ -40,7 +40,7 @@ public class Program
         builder.AddCorsService();
         builder.RegisterServices();
         builder.RegisterRepositories();
-        builder.RegisterCachingRepositories();
+        //builder.RegisterCachingRepositories();
 
         builder.Services.AddHttpClient();
         builder.Services.AddControllers();

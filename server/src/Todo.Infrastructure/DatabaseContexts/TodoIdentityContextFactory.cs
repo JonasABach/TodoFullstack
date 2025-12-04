@@ -7,7 +7,7 @@ public class TodoIdentityContextFactory : IDesignTimeDbContextFactory<TodoIdenti
 {
   public TodoIdentityContext CreateDbContext(string[] args)
   {
-    const string sqlServerConnectionString = "Server=sql.bsite.net\\MSSQL2016;Database=aladawy_todo_fullstack;User Id=aladawy_todo_fullstack;Password=Al-Adawy@123;trustServerCertificate=true;";
+    const string sqlServerConnectionString = "Server=tcp:todofullstackserver.database.windows.net,1433;Initial Catalog=TodoFullstackDB;Persist Security Info=False;User ID=todo_admin;Password=#Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
     var optionsBuilder = new DbContextOptionsBuilder<TodoIdentityContext>();
     optionsBuilder.UseSqlServer(sqlServerConnectionString);
 

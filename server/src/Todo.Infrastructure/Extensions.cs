@@ -24,6 +24,18 @@ public static class Extensions
         builder.Services.AddScoped<ListRepository>();
         builder.Services.AddScoped<TasksRepository>();
         builder.Services.AddScoped<AccountRepository>();
+
+        // Map interfaces to DB implementations (no Redis)
+        builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+        builder.Services.AddScoped<
+            IRepository<TaskList, AddListDto, UpdateListDto>,
+            ListRepository
+        >();
+        builder.Services.AddScoped<
+            IRepository<Task, AddTaskDto, UpdateTaskDto>,
+            TasksRepository
+        >();
+
         builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
     }
 
