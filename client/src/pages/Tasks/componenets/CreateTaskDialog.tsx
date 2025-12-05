@@ -1,6 +1,3 @@
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { TaskPriority } from "@/lib/api/interfaces"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -18,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
@@ -26,10 +22,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useAppStore } from "@/lib/store/useStore"
+import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/hooks/use-toast"
+import { TaskPriority } from "@/lib/api/interfaces"
+import { useAppStore } from "@/lib/store/useStore"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod" 
 
 const taskSchema = z.object({
   name: z.string()
@@ -145,7 +145,7 @@ export function CreateTaskDialog() {
                   <FormLabel>Priority</FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(Number(value))}
-                    defaultValue={field.value.toString()}
+                    defaultValue={field.value?.toString() ?? TaskPriority.Low.toString()}
                   >
                     <FormControl>
                       <SelectTrigger>

@@ -1,5 +1,5 @@
 import api from "./axios";
-import { RegisterRequest, LoginRequest, AuthResponse } from "./interfaces";
+import { AuthResponse, LoginRequest, RegisterRequest } from "./interfaces";
 import { AUTH_URLs } from "./URLs";
 
 const SUCCESSFUL_RESPONSE = 200;
