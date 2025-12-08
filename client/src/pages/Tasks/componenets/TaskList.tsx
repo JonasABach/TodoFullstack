@@ -1,12 +1,12 @@
-import { useEffect} from "react"
-import { TaskItem } from "./TaskItem"
-import { Task } from "@/lib/api/interfaces"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import TaskCompletedViewList from "./TaskCompletedViewList"
-import AllPendingTasksList from "./AllPendingTasksList"
-import NoPendingTasks from "@/components/no-pending-tasks"
 import { DraggableTasks } from "@/components/draggable-tasks"
+import NoPendingTasks from "@/components/no-pending-tasks"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Task } from "@/lib/api/interfaces"
+import { useEffect } from "react"
+import AllPendingTasksList from "./AllPendingTasksList"
+import TaskCompletedViewList from "./TaskCompletedViewList"
 import { SortOption } from "./TaskFilters"
+import { TaskItem } from "./TaskItem"
 
 interface TaskListProps {
   tasks: Task[]
@@ -15,24 +15,24 @@ interface TaskListProps {
   sortOption?: SortOption
 }
 
-export function TaskList({ tasks, isCompletedView, 
+export function TaskList({ tasks, isCompletedView,
   isAllPendingView, sortOption }: TaskListProps) {
   const pendingTasks = tasks.filter(task => !task.isCompleted)
   const completedTasks = tasks.filter(task => task.isCompleted)
-  
+
   useEffect(() => {
     console.log('TaskList rendered')
   }, [tasks])
-  
+
   if (isCompletedView) return <TaskCompletedViewList />
-  if (isAllPendingView) return <AllPendingTasksList />
+  if (isAllPendingView) return <AllPendingTasksList tasks={pendingTasks} />
   if (tasks.length === 0) return <NoPendingTasks />
 
   return (
     <div className="container space-y-4">
-        <div className="container space-y-2">
-          <DraggableTasks tasks={pendingTasks} sortOption={sortOption} />
-        </div>
+      <div className="container space-y-2">
+        <DraggableTasks tasks={pendingTasks} sortOption={sortOption} />
+      </div>
       <Accordion type="multiple" className="space-y-1 border-0">
         {completedTasks.length > 0 && (
           <AccordionItem value="completed">

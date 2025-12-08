@@ -1,18 +1,18 @@
-import { useAppStore } from "@/lib/store/useStore";
-import { TaskList } from "./componenets/TaskList";
-import { TaskFilters, SortOption } from "./componenets/TaskFilters";
-import { CreateTaskDialog } from "./componenets/CreateTaskDialog";
-import Layout from "@/layout";
-import { useEffect, useState, useMemo } from "react";
-import { useParams, useNavigate } from "react-router";
-import { List } from "@/lib/api/interfaces";
-import { toast } from "@/hooks/use-toast";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AppDrawer } from "@/components/app-drawer";
 import { EditListForm } from "@/components/edit-list-form";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { toast } from "@/hooks/use-toast";
+import Layout from "@/layout";
+import { List, Task } from "@/lib/api/interfaces";
+import { useAppStore } from "@/lib/store/useStore";
+import { MoreHorizontal } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { CreateTaskDialog } from "./componenets/CreateTaskDialog";
+import { SortOption, TaskFilters } from "./componenets/TaskFilters";
+import { TaskList } from "./componenets/TaskList";
 
 interface ToastStateProps {
   id: string;
@@ -23,14 +23,14 @@ export function Tasks() {
   const { listId } = useParams()
   const navigate = useNavigate()
   const {
-    lists, 
-    tasks, 
-    setSelectedList, 
+    lists,
+    tasks,
+    setSelectedList,
     selectedListId,
-    selectedListTasks, 
-    deleteList, 
-    isLoading, 
-    error 
+    selectedListTasks,
+    deleteList,
+    isLoading,
+    error
   } = useAppStore();
   const [selectedList, setList] = useState<List>();
   const [isEditListOpen, setIsEditListOpen] = useState(false);
@@ -42,7 +42,7 @@ export function Tasks() {
   // Show loading toast when isLoading changes
   useEffect(() => {
     let toastState: ToastStateProps;
-    
+
     if (isLoading) {
       const { id, dismiss } = toast({
         title: "Loading...",
@@ -67,7 +67,7 @@ export function Tasks() {
       });
     }
   }, [error]);
-  
+
   useEffect(() => {
     if (listId) {
       switch (listId) {
@@ -89,60 +89,64 @@ export function Tasks() {
           }
       }
     } else if (selectedListId) {
-        const list = lists.find(l => l.id === selectedListId);
-        if (list) {
-          setList(list)
-        } else {
-          navigate('/tasks/all', { replace: true })
-        }
+      const list = lists.find(l => l.id === selectedListId);
+      if (list) {
+        setList(list)
+      } else {
+        navigate('/tasks/all', { replace: true })
       }
-    }, [listId, lists, tasks, navigate, setSelectedList, selectedListId])
-  
-  const filteredAndSortedTasks = useMemo(() => {
-    let filtered = [...selectedListTasks]
+    }
+  }, [listId, lists, tasks, navigate, setSelectedList, selectedListId])
 
-    // Apply search filter
+  function filterAndSort(tasksSource: Task[]) {
+    let filtered = [...tasksSource];
+
     if (search) {
-      filtered = filtered.filter(task => 
+      filtered = filtered.filter(task =>
         task.name.toLowerCase().includes(search.toLowerCase()) ||
         task.description?.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Apply priority filter
     if (priority !== "all") {
-      filtered = filtered.filter(task => 
-        task.priority === Number(priority)
-      )
+      filtered = filtered.filter(task => task.priority === Number(priority));
     }
 
-    // Apply status filter
     if (status !== "all") {
-      filtered = filtered.filter(task => 
+      filtered = filtered.filter(task =>
         status === "completed" ? task.isCompleted : !task.isCompleted
-      )
+      );
     }
 
-    // Apply sorting
     return filtered.sort((a, b) => {
       switch (sort) {
         case SortOption.NameAsc:
-          return a.name.localeCompare(b.name)
+          return a.name.localeCompare(b.name);
         case SortOption.NameDesc:
-          return b.name.localeCompare(a.name)
+          return b.name.localeCompare(a.name);
         case SortOption.PriorityHighToLow:
-          return a.priority - b.priority
+          return a.priority - b.priority;
         case SortOption.PriorityLowToHigh:
-          return b.priority - a.priority
+          return b.priority - a.priority;
         default:
-          return 0
+          return 0;
       }
-    })
-  }, [selectedListTasks, search, priority, status, sort])
+    });
+  }
+
+  const filteredAndSortedTasks = useMemo(
+    () => filterAndSort(selectedListTasks),
+    [selectedListTasks, search, priority, status, sort]
+  );
+
+  const allFilteredAndSortedTasks = useMemo(
+    () => filterAndSort(tasks),
+    [tasks, search, priority, status, sort]
+  );
 
   const handleDeleteList = async () => {
     if (!selectedList) return;
-    
+
     try {
       await deleteList(selectedList.id);
       toast({
@@ -160,7 +164,7 @@ export function Tasks() {
       console.error("Failed to delete list:", error);
     }
   };
-  
+
   // Get the display title based on the current view
   const getViewTitle = () => {
     switch (listId) {
@@ -175,7 +179,7 @@ export function Tasks() {
 
   // Show/hide list actions based on view
   const showListActions = !['all', 'completed'].includes(listId || '');
-  
+
   return (
     <Layout>
       <div className="container mx-auto flex flex-col h-[calc(100vh-2rem)]">
@@ -198,7 +202,7 @@ export function Tasks() {
                         <DropdownMenuItem onClick={() => setIsEditListOpen(true)}>
                           Edit List
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           className="text-destructive"
                           onClick={handleDeleteList}
                         >
@@ -216,7 +220,7 @@ export function Tasks() {
             {showListActions && <CreateTaskDialog />}
           </div>
 
-          <TaskFilters 
+          <TaskFilters
             onSearchChange={setSearch}
             onPriorityChange={setPriority}
             onStatusChange={setStatus}
@@ -226,8 +230,8 @@ export function Tasks() {
 
         {/* Scrollable Content */}
         <div className="container flex-1 overflow-auto pb-4">
-          <TaskList 
-            tasks={filteredAndSortedTasks}
+          <TaskList
+            tasks={listId === 'all' ? allFilteredAndSortedTasks : filteredAndSortedTasks}
             isCompletedView={listId === 'completed'}
             isAllPendingView={listId === 'all'}
             sortOption={sort}
@@ -236,14 +240,14 @@ export function Tasks() {
 
         {/* Edit List Dialog */}
         {showListActions && (
-          <AppDrawer 
-            open={isEditListOpen} 
+          <AppDrawer
+            open={isEditListOpen}
             setOpen={setIsEditListOpen}
             title="Edit List"
             description="Make changes to your List here. Click save when you're done."
             form={
               selectedList && (
-                <EditListForm 
+                <EditListForm
                   listId={selectedList.id}
                   name={selectedList.name}
                   description={selectedList.description}
