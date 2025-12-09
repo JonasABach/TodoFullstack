@@ -144,6 +144,7 @@ export function Tasks() {
     [tasks, search, priority, status, sort]
   );
 
+
   const handleDeleteList = async () => {
     if (!selectedList) return;
 
@@ -231,7 +232,13 @@ export function Tasks() {
         {/* Scrollable Content */}
         <div className="container flex-1 overflow-auto pb-4">
           <TaskList
-            tasks={listId === 'all' ? allFilteredAndSortedTasks : filteredAndSortedTasks}
+            tasks={
+              listId === 'all'
+                ? allFilteredAndSortedTasks
+                : listId === 'completed'
+                  ? allFilteredAndSortedTasks   // use ALL tasks here
+                  : filteredAndSortedTasks
+            }
             isCompletedView={listId === 'completed'}
             isAllPendingView={listId === 'all'}
             sortOption={sort}

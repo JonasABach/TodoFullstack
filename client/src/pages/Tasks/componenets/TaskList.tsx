@@ -2,32 +2,28 @@ import { DraggableTasks } from "@/components/draggable-tasks"
 import NoPendingTasks from "@/components/no-pending-tasks"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Task } from "@/lib/api/interfaces"
-import { useEffect } from "react"
 import AllPendingTasksList from "./AllPendingTasksList"
 import TaskCompletedViewList from "./TaskCompletedViewList"
 import { SortOption } from "./TaskFilters"
 import { TaskItem } from "./TaskItem"
 
 interface TaskListProps {
-  tasks: Task[]
-  isCompletedView?: boolean
-  isAllPendingView?: boolean
-  sortOption?: SortOption
+  tasks: Task[];
+  isCompletedView?: boolean;
+  isAllPendingView?: boolean;
+  sortOption?: SortOption;
 }
 
 export function TaskList({ tasks, isCompletedView,
   isAllPendingView, sortOption }: TaskListProps) {
-  const pendingTasks = tasks.filter(task => !task.isCompleted)
-  const completedTasks = tasks.filter(task => task.isCompleted)
 
-  useEffect(() => {
-    console.log('TaskList rendered')
-  }, [tasks])
+  const pendingTasks = tasks.filter(task => !task.isCompleted);
+  const completedTasks = tasks.filter(task => task.isCompleted);
 
-  if (isCompletedView) return <TaskCompletedViewList />
-  if (isAllPendingView) return <AllPendingTasksList tasks={pendingTasks} />
-  if (tasks.length === 0) return <NoPendingTasks />
-
+  if (isCompletedView) return <TaskCompletedViewList tasks={completedTasks} />;
+  if (isAllPendingView) return <AllPendingTasksList tasks={tasks} />;
+  if (tasks.length === 0) return <NoPendingTasks />;
+  
   return (
     <div className="container space-y-4">
       <div className="container space-y-2">

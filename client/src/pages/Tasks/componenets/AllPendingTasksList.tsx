@@ -13,21 +13,17 @@ export default function AllPendingTasksList({ tasks }: AllPendingTasksListProps)
   const { lists } = useAppStore();
 
   const tasksByList = tasks.reduce((acc, task) => {
-    if (task.isCompleted) return acc;
     const list = lists.find(l => l.id === task.listId);
-    if (list) {
-      if (!acc[list.id]) {
-        acc[list.id] = {
-          list,
-          tasks: []
-        };
-      }
-      acc[list.id].tasks.push(task);
+    if (!list) return acc;
+
+    if (!acc[list.id]) {
+      acc[list.id] = { list, tasks: [] };
     }
+    acc[list.id].tasks.push(task);
     return acc;
   }, {} as Record<string, { list: List; tasks: Task[] }>);
 
-  useEffect(() => {}, [tasks]);
+  useEffect(() => { }, [tasks]);
 
   if (Object.keys(tasksByList).length === 0)
     return <NoPendingTasks />;
