@@ -38,6 +38,9 @@ const taskSchema = z.object({
   description: z.string()
     .max(500, "Description must not exceed 500 characters")
     .optional(),
+  duedate: z.date()
+    .min(new Date(), "Due date must be in the future")
+    .optional(),
   priority: z.number()
     .min(0, "Priority must be between 0 and 4")
     .max(4, "Priority must be between 0 and 4"),
@@ -53,6 +56,7 @@ export function CreateTaskDialog() {
     defaultValues: {
       name: "",
       description: "",
+      duedate: undefined,
       priority: TaskPriority.Low,
     },
   })
@@ -74,6 +78,7 @@ export function CreateTaskDialog() {
       await createTask({
         name: data.name,
         description: data.description || "",
+        dueDate: data.duedate ? data.duedate.toISOString() : null,
         priority: data.priority,
         isCompleted: false,
         listId: selectedListId,
@@ -116,13 +121,13 @@ export function CreateTaskDialog() {
                 <FormItem>
                   <FormLabel>Task Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter Task Name"/>
+                    <Input {...field} placeholder="Enter Task Name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="description"
@@ -130,13 +135,34 @@ export function CreateTaskDialog() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea {...field} placeholder="Enter task description (optional)"/>
+                    <Textarea {...field} placeholder="Enter task description (optional)" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+
+            <FormField
+              control={form.control}
+              name="duedate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Due Date</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      value={field.value ? field.value.toISOString().split('T')[0] : ''}
+                      onChange={(e) => {
+                        const dateValue = e.target.value ? new Date(e.target.value) : undefined;
+                        field.onChange(dateValue);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="priority"
@@ -166,7 +192,7 @@ export function CreateTaskDialog() {
                 </FormItem>
               )}
             />
-            
+
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                 Cancel

@@ -30,6 +30,11 @@ public class Task
     public string? Description { get; set; } = string.Empty;
 
     /// <summary>
+    ///     The due date of the task, optional, and can be null.
+    /// </summary>
+    public DateTime? DueDate { get; set; }
+
+    /// <summary>
     ///     The flag that indicates if the task is completed or not.
     ///     The default value is false, and it is required.
     /// </summary>

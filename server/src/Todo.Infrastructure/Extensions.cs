@@ -17,6 +17,8 @@ public static class Extensions
     {
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IAuthService, AuthenticationService>();
+        builder.Services.AddScoped<ITaskDueDateService, TaskDueDateService>();
+        builder.Services.AddScoped<ITaskSummaryService, TaskSummaryService>();
     }
 
     public static void RegisterRepositories(this WebApplicationBuilder builder)

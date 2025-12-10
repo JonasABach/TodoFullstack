@@ -71,7 +71,7 @@ public class AuthController(
 
         logger.LogInformation("User logged in successfully with Refresh Token");
         return Ok(response);
-    }
+    } 
 
     /// <summary>
     ///     Register endpoint for users to create an account in the system.

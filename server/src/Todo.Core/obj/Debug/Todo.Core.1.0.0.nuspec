@@ -7,7 +7,7 @@
     <authors>Todo.Core</authors>
     <projectUrl>https://todo.aladawy.duckdns.org/</projectUrl>
     <description>This is the Todo Fullstack Core Class Library that contains the models and entities in the project.</description>
-    <repository type="git" url="https://github.com/moheladwy/TodoFullstack" commit="12e398958d92917bd5e26f433f8bb00838edd899" />
+    <repository type="git" url="https://github.com/moheladwy/TodoFullstack" commit="298bdf8feecc8e07e4a192cd3ccdb70025f4936c" />
     <dependencies>
       <group targetFramework="net8.0">
         <dependency id="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="8.0.11" exclude="Build,Analyzers" />

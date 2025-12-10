@@ -23,7 +23,7 @@ public class UpdateTaskDto
     /// </summary>
     public string? Description { get; set; }
 
-    // public DateTime? DueDate { get; set; }
+    public DateTime? DueDate { get; set; }
 
     /// <summary>
     ///     Gets or sets the task priority.

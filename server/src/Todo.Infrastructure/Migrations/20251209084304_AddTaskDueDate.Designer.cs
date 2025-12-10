@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Todo.Infrastructure.DatabaseContexts;
 
@@ -11,9 +12,11 @@ using Todo.Infrastructure.DatabaseContexts;
 namespace Todo.Infrastructure.Migrations
 {
     [DbContext(typeof(TodoIdentityContext))]
-    partial class TodoIdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20251209084304_AddTaskDueDate")]
+    partial class AddTaskDueDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -58,21 +58,22 @@ export enum TaskPriority {
 	Low = 3,
 }
 
-export interface List {
-	id: string;
-	name: string;
-	description?: string;
-	tasks?: Task[];
-}
-
 export interface Task {
 	id: string;
+	listId: string;
 	name: string;
 	description?: string;
 	priority: TaskPriority;
 	isCompleted: boolean;
-	listId: string;
-	dueDate?: string;
+	dueDate?: string | null;
+	
+}
+
+export interface List {
+	id: string;
+	name: string;
+	description?: string;
+	userId: string;
 }
 
 export interface CreateListRequest {
@@ -90,6 +91,7 @@ export interface UpdateListRequest {
 export interface CreateTaskRequest {
   name: string;
   description?: string;
+  dueDate?: string | null;
   priority: TaskPriority;
   listId: string;
   isCompleted: boolean;
@@ -103,4 +105,11 @@ export interface ListOrder {
 export interface TaskOrder {
   taskId: string;
   order: number;
+}
+
+export interface DueDateSummary {
+  overdueCount: number;
+  dueTodayCount: number;
+  dueThisWeekCount: number;
+  dueInFutureCount: number;
 }

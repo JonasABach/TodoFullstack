@@ -1,5 +1,6 @@
 import api from "./axios";
 import { AuthResponse, LoginRequest, RegisterRequest } from "./interfaces";
+import { withRetry } from "./axios";
 import { AUTH_URLs } from "./URLs";
 
 const SUCCESSFUL_RESPONSE = 200;
@@ -13,10 +14,18 @@ export const authApi = {
 	},
 
 	login: async (loginRequest: LoginRequest): Promise<AuthResponse> => {
+		return withRetry(
+			async () => {
 		const response = await api.post(AUTH_URLs.LOGIN, loginRequest);
 		if (response.status !== SUCCESSFUL_RESPONSE)
 			throw new Error("Login Faild");
 		return response.data;
+	},
+			{
+				retries: 10, // try one extra time
+				delayMs: 1500, // 1.5s for DB to wake up
+			}
+		);
 	},
 
 	refresh: async (refreshToken: string): Promise<AuthResponse> => {
@@ -35,4 +44,5 @@ export const authApi = {
 			throw new Error("Logout Faild");
 		return response.data;
 	},
+
 };

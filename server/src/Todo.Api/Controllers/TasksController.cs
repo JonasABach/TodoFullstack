@@ -25,8 +25,18 @@ namespace Todo.Api.Controllers;
 public class TasksController(IRepository<Entity_Task, AddTaskDto, UpdateTaskDto> taskRepository,
     ILogger<TasksController> logger,
     IValidator<AddTaskDto> addTaskValidator,
-    IValidator<UpdateTaskDto> updateTaskValidator) : ControllerBase
+    IValidator<UpdateTaskDto> updateTaskValidator,
+    ITaskSummaryService taskSummaryService) : ControllerBase
 {
+
+    [HttpGet("due-summary")]
+    public async Task<ActionResult<DueDateSummaryDto>> GetDueDateSummary(
+    CancellationToken cancellationToken)
+    {
+        var summary = await taskSummaryService.GetDueDateSummaryAsync(cancellationToken);
+        logger.LogInformation("Returned due date summary");
+        return Ok(summary);
+    }
 
     /// <summary>
     ///     Get all tasks for a specific list by listId.

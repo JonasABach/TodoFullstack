@@ -1,8 +1,12 @@
 import api from "./axios";
-import { Task } from "./interfaces";
+import { DueDateSummary, Task } from "./interfaces";
 import { TASKS_URLs } from "./URLs";
 
 const SUSSCESSFUL_STATUS = 200;
+
+
+
+
 
 export const tasksApi = {
 	getTasksByListId: async (listId: string): Promise<Task[]> => {
@@ -21,6 +25,7 @@ export const tasksApi = {
 		const response = await api.post<Task>(TASKS_URLs.CREATE_TASK, {
 			name: task.name,
 			description: task.description,
+			dueDate: task.dueDate,
 			priority: task.priority,
 			listId: task.listId,
 		});
@@ -35,6 +40,7 @@ export const tasksApi = {
 			id: task.id,
 			name: task.name,
 			description: task.description,
+			dueDate: task.dueDate,
 			priority: task.priority,
 			isCompleted: task.isCompleted,
 			listId: task.listId,
@@ -53,4 +59,9 @@ export const tasksApi = {
 			throw new Error("Failed to delete task with id: " + id);
 		}
 	},
+
+	getDueDateSummary: async (): Promise<DueDateSummary> => {
+    	const response = await api.get("/tasks/due-summary");
+    	return response.data;
+  },
 };

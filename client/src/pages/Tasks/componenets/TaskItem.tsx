@@ -1,12 +1,12 @@
-import { Task, TaskPriority } from "@/lib/api/interfaces"
-import { useAppStore } from "@/lib/store/useStore"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { toast } from "@/hooks/use-toast"
+import { Task, TaskPriority } from "@/lib/api/interfaces"
+import { useAppStore } from "@/lib/store/useStore"
 import { Pencil, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { EditTaskDialog } from "./EditTaskDialog"
-import { toast } from "@/hooks/use-toast"
 
 
 interface TaskItemProps {
@@ -22,7 +22,7 @@ const priorityColors = {
 }
 
 export function TaskItem({ task, dragDisabled }: TaskItemProps) {
-  const {updateTask, deleteTask} = useAppStore()
+  const { updateTask, deleteTask } = useAppStore()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
   const handleToggleComplete = async () => {
@@ -31,7 +31,7 @@ export function TaskItem({ task, dragDisabled }: TaskItemProps) {
       isCompleted: !task.isCompleted
     })
   }
-  
+
   const handleDeleteTask = async () => {
     try {
       await deleteTask(task.id)
@@ -59,13 +59,12 @@ export function TaskItem({ task, dragDisabled }: TaskItemProps) {
           checked={task.isCompleted}
           onCheckedChange={handleToggleComplete}
         />
-        
+
         <div className="flex-1">
-          <h3 className={`font-medium ${
-            task.isCompleted 
-              ? 'line-through text-muted-foreground' 
+          <h3 className={`font-medium ${task.isCompleted
+              ? 'line-through text-muted-foreground'
               : 'text-foreground'
-          }`}>
+            }`}>
             {task.name}
           </h3>
           {task.description && (
@@ -73,13 +72,19 @@ export function TaskItem({ task, dragDisabled }: TaskItemProps) {
               {task.description}
             </p>
           )}
+          {task.dueDate && (
+            <span className="text-xs text-muted-foreground">
+              {/* DD/MM/YYYY */}
+              Due: {new Date(task.dueDate).toLocaleDateString("en-GB")}
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
           <Badge className={`${priorityColors[task.priority]} text-white`}>
             {TaskPriority[task.priority]}
           </Badge>
-          
+
           <Button
             variant="ghost"
             size="icon"
@@ -87,7 +92,7 @@ export function TaskItem({ task, dragDisabled }: TaskItemProps) {
           >
             <Pencil className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="ghost"
             size="icon"

@@ -2,6 +2,9 @@
 
 Todo Fullstack is a comprehensive task management application that showcases the integration between ASP.NET Core 8 Web API and React (Typescript). The application allows users to create, update, and delete task lists and tasks with priorities. It also supports user authentication and authorization with JWT tokens and refresh tokens.
 
+##Migration
+dotnet ef migrations add AddTaskDueDate --project .\src\Todo.Infrastructure\Todo.Infrastructure.csproj --startup-project .\src\Todo.Api\Todo.Api.csproj --context TodoIdentityContext
+dotnet ef database update --project .\src\Todo.Infrastructure\Todo.Infrastructure.csproj --startup-project .\src\Todo.Api\Todo.Api.csproj --context TodoIdentityContext
 ## Motivation
 
 As a software developer passionate about full-stack development, I created this project to strengthen my expertise in:

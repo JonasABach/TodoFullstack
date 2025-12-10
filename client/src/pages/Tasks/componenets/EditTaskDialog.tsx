@@ -1,6 +1,3 @@
-import { useForm } from "react-hook-form"
-import { Task, TaskPriority } from "@/lib/api/interfaces"
-import { useAppStore } from "@/lib/store/useStore"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -17,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
@@ -25,10 +21,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/hooks/use-toast"
+import { Task, TaskPriority } from "@/lib/api/interfaces"
+import { useAppStore } from "@/lib/store/useStore"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import { useState } from "react"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
 
 const taskSchema = z.object({
   name: z.string()
@@ -41,6 +41,22 @@ const taskSchema = z.object({
     .min(0, "Priority must be between 0 and 4")
     .max(4, "Priority must be between 0 and 4"),
   isCompleted: z.boolean(),
+  dueDate: z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      (value) => {
+        if (!value) return true; // allow empty / cleared due date
+        const selected = new Date(value);
+        const today = new Date();
+        // strip time for comparison
+        selected.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        return selected >= today;
+      },
+      { message: "Due date must be today or in the future" }
+    ),
 });
 
 type TaskForm = z.infer<typeof taskSchema>;
@@ -66,6 +82,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
       description: task.description || "",
       priority: task.priority,
       isCompleted: task.isCompleted,
+      dueDate: task.dueDate ? task.dueDate.split("T")[0] : null,
     },
   })
 
@@ -115,7 +132,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="description"
@@ -123,8 +140,8 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      {...field} 
+                    <Textarea
+                      {...field}
                       placeholder="Enter task description (optional)"
                       disabled={isSubmitting}
                     />
@@ -133,7 +150,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="priority"
@@ -142,7 +159,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
                   <FormLabel>Priority</FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(Number(value))}
-                    defaultValue={field.value.toString()}
+                    defaultValue={field.value?.toString() ?? "0"}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -163,7 +180,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="isCompleted"
@@ -172,7 +189,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
                   <FormLabel>Status</FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(value === "true")}
-                    defaultValue={field.value.toString()}
+                    defaultValue={field.value?.toString() ?? "false"}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -194,7 +211,26 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
                 </FormItem>
               )}
             />
-            
+
+            <FormField
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Due Date</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value || null)}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel

@@ -1,4 +1,5 @@
 import { AppDrawer } from "@/components/app-drawer";
+import { DueDateSummaryWidget } from "@/components/duedateSummary";
 import { EditListForm } from "@/components/edit-list-form";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -11,7 +12,7 @@ import { MoreHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { CreateTaskDialog } from "./componenets/CreateTaskDialog";
-import { SortOption, TaskFilters } from "./componenets/TaskFilters";
+import { DueDateFilterOption, SortOption, TaskFilters } from "./componenets/TaskFilters";
 import { TaskList } from "./componenets/TaskList";
 
 interface ToastStateProps {
@@ -38,6 +39,7 @@ export function Tasks() {
   const [priority, setPriority] = useState("all")
   const [status, setStatus] = useState("all")
   const [sort, setSort] = useState<SortOption>(SortOption.NameAsc)
+  const [dueDateFilter, setDueDateFilter] = useState<DueDateFilterOption>(DueDateFilterOption.All)
 
   // Show loading toast when isLoading changes
   useEffect(() => {
@@ -118,6 +120,37 @@ export function Tasks() {
       );
     }
 
+    if (dueDateFilter !== DueDateFilterOption.All) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      filtered = filtered.filter(task => {
+        if (!task.dueDate) return false; // tasks without due date are excluded for non-All
+        const d = new Date(task.dueDate);
+        if (isNaN(d.getTime())) return false;
+        d.setHours(0, 0, 0, 0);
+
+        switch (dueDateFilter) {
+          case DueDateFilterOption.Overdue:
+            return !task.isCompleted && d < today;
+          case DueDateFilterOption.Today:
+            return d.getTime() === today.getTime();
+          case DueDateFilterOption.ThisWeek: {
+            const dayOfWeek = today.getDay(); // 0-6
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - dayOfWeek);
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            return d >= startOfWeek && d <= endOfWeek;
+          }
+          case DueDateFilterOption.Future:
+            return d > today;
+          default:
+            return true;
+        }
+      });
+    }
+
     return filtered.sort((a, b) => {
       switch (sort) {
         case SortOption.NameAsc:
@@ -136,12 +169,12 @@ export function Tasks() {
 
   const filteredAndSortedTasks = useMemo(
     () => filterAndSort(selectedListTasks),
-    [selectedListTasks, search, priority, status, sort]
+    [selectedListTasks, search, priority, status, sort, dueDateFilter]
   );
 
   const allFilteredAndSortedTasks = useMemo(
     () => filterAndSort(tasks),
-    [tasks, search, priority, status, sort]
+    [tasks, search, priority, status, sort, dueDateFilter]
   );
 
 
@@ -194,11 +227,13 @@ export function Tasks() {
                   <h1 className="text-2xl font-bold">{getViewTitle()}</h1>
                   {showListActions && (
                     <DropdownMenu>
+
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
+
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => setIsEditListOpen(true)}>
                           Edit List
@@ -220,12 +255,15 @@ export function Tasks() {
             </div>
             {showListActions && <CreateTaskDialog />}
           </div>
+          <DueDateSummaryWidget />
+
 
           <TaskFilters
             onSearchChange={setSearch}
             onPriorityChange={setPriority}
             onStatusChange={setStatus}
             onSortChange={setSort}
+            onDueDateFilterChange={setDueDateFilter}
           />
         </div>
 

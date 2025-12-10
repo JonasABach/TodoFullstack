@@ -423,6 +423,11 @@
                 The description is optional and can be null.
             </summary>
         </member>
+        <member name="P:Todo.Core.Entities.Task.DueDate">
+            <summary>
+                The due date of the task, optional, and can be null.
+            </summary>
+        </member>
         <member name="P:Todo.Core.Entities.Task.IsCompleted">
             <summary>
                 The flag that indicates if the task is completed or not.

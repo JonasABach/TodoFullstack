@@ -89,7 +89,7 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
         {
             Name = dto.Name,
             Description = dto.Description ?? string.Empty,
-            // DueDate = dto.DueDate ?? null,
+            DueDate = dto.DueDate ?? null,
             Priority = (TaskPriority)dto.Priority,
             ListId = dto.ListId
         };
@@ -145,7 +145,7 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
         entity.Description = (dto.Description is not null) ? dto.Description : string.Empty;
         entity.IsCompleted = dto.IsCompleted;
         // Update the task's due date.
-        // entity.DueDate = dto.DueDate;
+        entity.DueDate = dto.DueDate;
         entity.Priority = dto.Priority;
 
         return entity;

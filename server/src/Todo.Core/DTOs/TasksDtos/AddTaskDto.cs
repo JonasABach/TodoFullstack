@@ -17,7 +17,7 @@ public class AddTaskDto
     /// </summary>
     public string? Description { get; init; }
 
-    // public DateTime? DueDate { get; set; }
+    public DateTime? DueDate { get; init; }
 
     /// <summary>
     ///     The priority of the task.

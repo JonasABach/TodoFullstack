@@ -17,11 +17,20 @@ export enum SortOption {
   PriorityHighToLow = "priority_high_to_low",
 }
 
+export enum DueDateFilterOption {
+  All = "due_all",
+  Overdue = "due_overdue",
+  Today = "due_today",
+  ThisWeek = "due_this_week",
+  Future = "due_future",
+}
+
 interface TaskFiltersProps {
   onSearchChange: (search: string) => void
   onPriorityChange: (priority: string) => void
   onStatusChange: (status: string) => void
   onSortChange: (sort: SortOption) => void
+  onDueDateFilterChange?: (dueDateFilter: DueDateFilterOption) => void
 }
 
 export function TaskFilters({
@@ -29,6 +38,7 @@ export function TaskFilters({
   onPriorityChange,
   onStatusChange,
   onSortChange,
+  onDueDateFilterChange,
 }: TaskFiltersProps) {
   return (
     <div className="flex flex-wrap gap-2 mb-4">
@@ -37,7 +47,7 @@ export function TaskFilters({
         className="flex-1 min-w-[200px]"
         onChange={(e) => onSearchChange(e.target.value)}
       />
-      
+
       <Select defaultValue="all"
         onValueChange={(value) => onPriorityChange(value as string)}
       >
@@ -56,7 +66,7 @@ export function TaskFilters({
         </SelectContent>
       </Select>
 
-      <Select defaultValue="all" 
+      <Select defaultValue="all"
         onValueChange={(value) => onStatusChange(value as string)}
       >
         <SelectTrigger className="w-[180px]">
@@ -68,8 +78,8 @@ export function TaskFilters({
           <SelectItem value="pending">Pending</SelectItem>
         </SelectContent>
       </Select>
-      
-      <Select 
+
+      <Select
         defaultValue={SortOption.NameAsc}
         onValueChange={(value) => onSortChange(value as SortOption)}
       >
@@ -86,6 +96,22 @@ export function TaskFilters({
           <SelectItem value={SortOption.PriorityHighToLow}>
             Priority (High to Low)
           </SelectItem>
+        </SelectContent>
+      </Select>
+
+      <Select
+        defaultValue={DueDateFilterOption.All}
+        onValueChange={(value) => onDueDateFilterChange?.(value as DueDateFilterOption)}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Due Date" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={DueDateFilterOption.All}>All</SelectItem>
+          <SelectItem value={DueDateFilterOption.Overdue}>Overdue</SelectItem>
+          <SelectItem value={DueDateFilterOption.Today}>Today</SelectItem>
+          <SelectItem value={DueDateFilterOption.ThisWeek}>This Week</SelectItem>
+          <SelectItem value={DueDateFilterOption.Future}>Future</SelectItem>
         </SelectContent>
       </Select>
     </div>
