@@ -5,6 +5,9 @@ Todo Fullstack is a comprehensive task management application that showcases the
 ##Migration
 dotnet ef migrations add AddTaskDueDate --project .\src\Todo.Infrastructure\Todo.Infrastructure.csproj --startup-project .\src\Todo.Api\Todo.Api.csproj --context TodoIdentityContext
 dotnet ef database update --project .\src\Todo.Infrastructure\Todo.Infrastructure.csproj --startup-project .\src\Todo.Api\Todo.Api.csproj --context TodoIdentityContext
+
+##Run backend:
+dotnet run --launch-profile http --project .\src\Todo.Api\Todo.Api.csproj
 ## Motivation
 
 As a software developer passionate about full-stack development, I created this project to strengthen my expertise in:

@@ -17,6 +17,7 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
     ///     The database context for the Identity database.
     /// </summary>
     private readonly TodoIdentityContext _identityContext;
+    private readonly ITaskNotificationService _taskNotificationService;
 
     /// <summary>
     ///     Initializes a new instance of the TasksRepository class.
@@ -24,7 +25,11 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
     /// <param name="identityContext">
     ///     The database context for the Identity database.
     /// </param>
-    public TasksRepository(TodoIdentityContext identityContext) => _identityContext = identityContext;
+    public TasksRepository(TodoIdentityContext identityContext, ITaskNotificationService taskNotificationService)
+    {
+        _identityContext = identityContext;
+        _taskNotificationService = taskNotificationService;
+    }
 
     /// <summary>
     ///     Gets all the Tasks from the database that belong to the specified List.
@@ -90,12 +95,14 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
             Name = dto.Name,
             Description = dto.Description ?? string.Empty,
             DueDate = dto.DueDate ?? null,
+            IsCompleted = false,
             Priority = (TaskPriority)dto.Priority,
             ListId = dto.ListId
         };
 
         _identityContext.Tasks.Add(task); // Add the new Task to the database context.
         await _identityContext.SaveChangesAsync(); // Save the changes to the database.
+        await _taskNotificationService.NotifyTaskCreated(task);
         return task;
     }
 
@@ -115,13 +122,20 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
     {
         var task = await _identityContext.Tasks
                        .Where(l => l.Id == entity.Id)
-                       .FirstAsync() ??
-                   throw new TaskNotFoundException($"Task with the specified ID: {entity.Id} not found.");
+                       .FirstAsync()
+                   ?? throw new TaskNotFoundException($"Task with the specified ID: {entity.Id} not found.");
 
-        task = UpdateEntity(task, entity); // Update the Task entity with the new data.
+        var wasCompleted = task.IsCompleted;          // old value
 
-        _identityContext.Tasks.Update(task); // Update the list in the database context.
-        await _identityContext.SaveChangesAsync(); // Save the changes to the database.
+        task = UpdateEntity(task, entity);            // apply updates
+
+        if (!wasCompleted && task.IsCompleted)        // transitioned to completed
+        {
+            await _taskNotificationService.NotifyTaskCompleted(task);
+        }
+
+        _identityContext.Tasks.Update(task);
+        await _identityContext.SaveChangesAsync();
         return task;
     }
 
