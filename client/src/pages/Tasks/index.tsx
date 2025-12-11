@@ -1,6 +1,7 @@
 import { AppDrawer } from "@/components/app-drawer";
 import { DueDateSummaryWidget } from "@/components/duedateSummary";
 import { EditListForm } from "@/components/edit-list-form";
+import { ImportTasksFromExcel } from "@/components/import-tasks-from-excel";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -253,7 +254,11 @@ export function Tasks() {
                 )}
               </div>
             </div>
-            {showListActions && <CreateTaskDialog />}
+            {listId === 'all' ? (
+              <ImportTasksFromExcel />
+            ) : (
+              showListActions && <CreateTaskDialog />
+            )}
           </div>
           <DueDateSummaryWidget />
 

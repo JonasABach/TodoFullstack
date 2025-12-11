@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyDescriptionAttribute(("This is the Todo Fullstack Core Class Library that contains the models and entiti" +
     "es in the project."))]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41cd1904c0796a7e73c34e8287bd152771d4a343")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a28a0735018589348067da11d28fdb0b77c4c4e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Todo.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Todo.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

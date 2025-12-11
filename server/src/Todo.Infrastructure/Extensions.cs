@@ -20,6 +20,7 @@ public static class Extensions
         builder.Services.AddScoped<ITaskDueDateService, TaskDueDateService>();
         builder.Services.AddScoped<ITaskSummaryService, TaskSummaryService>();
         builder.Services.AddScoped<ITaskNotificationService, TaskNotificationService>();
+        builder.Services.AddScoped<ITaskSpreadsheetImportService, TaskSpreadsheetImportService>();
     }
 
     public static void RegisterRepositories(this WebApplicationBuilder builder)

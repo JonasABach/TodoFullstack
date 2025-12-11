@@ -1,13 +1,5 @@
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { useNavigate } from "react-router"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { useAppStore } from "@/lib/store/useStore"
 import {
   Form,
   FormControl,
@@ -16,7 +8,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast"
+import { useAppStore } from "@/lib/store/useStore"
+import { cn } from "@/lib/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router"
+import * as z from "zod"
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
@@ -52,7 +52,7 @@ export function LoginForm({
         title: "Success",
         description: "You have successfully logged in.",
       })
-      navigate("/tasks" , {replace: true})
+      navigate("/tasks/all", { replace: true })
     } catch (error) {
       toast({
         title: "Login failed",
