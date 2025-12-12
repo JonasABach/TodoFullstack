@@ -74,47 +74,31 @@ export const appStore = createStore<State>((set, get) => ({
   
   initializeStore: async () => {
     try {
-      const userId = localStorage.getItem('userId')
-      const accessToken = localStorage.getItem('accessToken')
-      if (!userId || !accessToken) {
-        set({ 
-          user: null, 
-          lists: [], 
-          selectedListId: null, 
-          tasks: [], 
-          isLoading: false 
-        })
-        return
-      }
-  
       set({ isLoading: true })
-      // Fetch user info
-      await get().fetchUserInfo(userId)
-      // Fetch lists and tasks
+
+      // Under Entra ID/MSAL, axios attaches the token automatically.
+      // Simply try to load lists; if the API returns 401, we'll
+      // fall through to the catch block and clear local state.
       await get().fetchLists()
-      
-      // Load orders from localStorage
+
       const savedListOrder = localStorage.getItem('listOrder');
       const savedTaskOrders = localStorage.getItem('taskOrders');
       
-      set({ listOrder: savedListOrder ? JSON.parse(savedListOrder) : [],
-            taskOrders: savedTaskOrders ? JSON.parse(savedTaskOrders) : {},
-            isLoading: false })
+      set({ 
+        listOrder: savedListOrder ? JSON.parse(savedListOrder) : [],
+        taskOrders: savedTaskOrders ? JSON.parse(savedTaskOrders) : {},
+        isLoading: false 
+      })
     } catch (error) {
-      // If there's an error (like expired token), clear everything
       console.error('Failed to initialize store:', error)
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-      localStorage.removeItem('userId')
       set({ 
         user: null, 
         lists: [], 
         selectedListId: null, 
         tasks: [], 
         isLoading: false,
-        error: 'Session expired. Please login again.'
+        error: null
       })
-      throw error;
     }
   },
 

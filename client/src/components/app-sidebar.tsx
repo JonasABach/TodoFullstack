@@ -20,7 +20,8 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu"
 import { useAppStore } from "@/lib/store/useStore"
-import { Navigate, useNavigate, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
+import { useMsal } from "@azure/msal-react"
 import { useMemo, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast"
@@ -31,7 +32,8 @@ import { DraggableLists } from "./draggable-lists"
 export function AppSidebar() {
   const navigate = useNavigate()
   const { listId } = useParams()
-  const { user, logout, tasks, createList } = useAppStore()
+  const { user, tasks, createList } = useAppStore()
+  const { instance } = useMsal()
   const [isAddingList, setIsAddingList] = useState(false)
   const [newListName, setNewListName] = useState("")
 
@@ -70,7 +72,6 @@ export function AppSidebar() {
         await createList({
           name: newListName.trim(),
           description: "",
-          userId: user?.id || "",
         })
         setNewListName("")
         setIsAddingList(false)
@@ -87,14 +88,12 @@ export function AppSidebar() {
   
   const handleLogout = async () => {
     try {
-      await logout()
-      navigate("/login", { replace: true })
+      // Sign out from Entra ID/MSAL and redirect to login
+      await instance.logoutRedirect({ postLogoutRedirectUri: window.location.origin + "/login" })
     } catch (error) {
       console.error("Logout failed:", error)
     }
   }
-
-  if (!user) return <Navigate to="/login" replace />
 
   return (
     <Sidebar>
@@ -242,7 +241,7 @@ export function AppSidebar() {
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton>
                     <User2 />
-                    <span>{user.userName}</span>
+                    <span>{user?.userName ?? "User"}</span>
                     <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>

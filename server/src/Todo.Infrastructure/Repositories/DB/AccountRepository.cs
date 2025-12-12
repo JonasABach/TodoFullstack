@@ -81,8 +81,40 @@ public class AccountRepository : IAccountRepository
         var userEmail = claims.FindFirst(ClaimTypes.Email)?.Value ??
                         throw new UnauthorizedAccessException("User not authenticated.");
 
-        var user = await _userManager.FindByEmailAsync(userEmail) ??
-            throw new UserNotFoundException($"User with this email: {userEmail} not found");
+        // Try to find existing user by email
+        var user = await _userManager.FindByEmailAsync(userEmail);
+        if (user is null)
+        {
+            // Auto-provision a local Identity user for Entra ID accounts
+            var givenName = claims.FindFirst(ClaimTypes.GivenName)?.Value;
+            var surname = claims.FindFirst(ClaimTypes.Surname)?.Value;
+            var displayName = claims.FindFirst(ClaimTypes.Name)?.Value;
+
+            // Ensure required name fields meet validation constraints (3-25 chars)
+            var firstName = !string.IsNullOrWhiteSpace(givenName) && givenName.Length >= 3
+                ? givenName
+                : "Entra";
+            var lastName = !string.IsNullOrWhiteSpace(surname) && surname.Length >= 3
+                ? surname
+                : "User";
+
+            user = new User
+            {
+                UserName = !string.IsNullOrWhiteSpace(displayName) ? displayName : userEmail,
+                Email = userEmail,
+                FirstName = firstName,
+                LastName = lastName,
+            };
+
+            var createResult = await _userManager.CreateAsync(user);
+            if (!createResult.Succeeded)
+            {
+                var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                throw new UserInformationDidNotUpdateException($"Failed to create user from Entra ID claims: {errors}");
+            }
+
+            _logger.LogInformation("Created new user from Entra ID claims with email: {userEmail}.", userEmail);
+        }
 
         _logger.LogInformation("User with email: {userEmail} found successfully.", userEmail);
         return user;

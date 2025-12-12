@@ -27,6 +27,7 @@ export function Tasks() {
   const {
     lists,
     tasks,
+    fetchLists,
     setSelectedList,
     selectedListId,
     selectedListTasks,
@@ -41,6 +42,15 @@ export function Tasks() {
   const [status, setStatus] = useState("all")
   const [sort, setSort] = useState<SortOption>(SortOption.NameAsc)
   const [dueDateFilter, setDueDateFilter] = useState<DueDateFilterOption>(DueDateFilterOption.All)
+
+  // Ensure lists are loaded when the Tasks page mounts
+  useEffect(() => {
+    if (!lists || lists.length === 0) {
+      fetchLists().catch((err) => {
+        console.error("Failed to fetch lists on Tasks mount:", err)
+      })
+    }
+  }, [lists, fetchLists])
 
   // Show loading toast when isLoading changes
   useEffect(() => {

@@ -103,32 +103,45 @@ public static class StartupBuilderConfigurations
     /// </exception>
     public static void AddAuthenticationService(this WebApplicationBuilder builder)
     {
-        var jwtConfigurations = new JwtConfigurations();
-        builder.Configuration.GetSection(Constants.JwtConfigurationsSectionKey).Bind(jwtConfigurations);
+        var azureAdSection = builder.Configuration.GetSection("AzureAd");
+        var instance = azureAdSection["Instance"];
+        var tenantId = azureAdSection["TenantId"];
+        var audience = azureAdSection["Audience"];
 
-        builder.Services.AddAuthentication(options =>
+        if (string.IsNullOrWhiteSpace(instance) ||
+            string.IsNullOrWhiteSpace(tenantId) ||
+            string.IsNullOrWhiteSpace(audience))
         {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
+            throw new InvalidOperationException("AzureAd configuration is missing required values.");
+        }
+
+        var authority = $"{instance}{tenantId}/v2.0";
+
+        builder.Services
+            .AddAuthentication(options =>
             {
-                ValidateIssuer = true,
-                ValidIssuer = jwtConfigurations.Issuer,
-                ValidateAudience = true,
-                ValidAudience = jwtConfigurations.Audience,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfigurations.SecretKey)
-                ),
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-        });
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Authority = authority;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    // Accept both v2.0 and v1 (sts.windows.net) issuers for this tenant
+                    ValidIssuers = new[]
+                    {
+                        authority,
+                        $"https://sts.windows.net/{tenantId}/"
+                    },
+                    ValidateAudience = true,
+                    ValidAudience = audience,
+                    // Do NOT set IssuerSigningKey: keys come from Entra metadata
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(5)
+                };
+            });
     }
 
     /// <summary>

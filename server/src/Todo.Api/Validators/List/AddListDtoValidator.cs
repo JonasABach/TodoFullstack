@@ -15,9 +15,5 @@ public class AddListDtoValidator : AbstractValidator<AddListDto>
         RuleFor(x => x.Description)
             .MaximumLength(500)
             .WithMessage("The field Description must not exceed 500 characters.");
-
-        RuleFor(x => x.UserId)
-            .NotNull().WithMessage("The field UserId must not be null.")
-            .NotEmpty().WithMessage("The field UserId must not be empty.");
     }
 }

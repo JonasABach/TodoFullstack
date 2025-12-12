@@ -20,9 +20,14 @@ public class TaskSummaryService : ITaskSummaryService
     }
 
     public async Task<DueDateSummaryDto> GetDueDateSummaryAsync(
+        string userId,
         CancellationToken cancellationToken = default)
     {
-        var tasks = await _dbContext.Tasks.AsNoTracking().ToListAsync(cancellationToken);
+        var tasks = await _dbContext.Tasks
+            .AsNoTracking()
+            .Include(t => t.TaskList)
+            .Where(t => t.TaskList != null && t.TaskList.UserId == userId)
+            .ToListAsync(cancellationToken);
         var now = DateTime.UtcNow;
 
         var summary = new DueDateSummaryDto();

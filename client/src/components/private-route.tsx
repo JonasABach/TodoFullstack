@@ -1,10 +1,15 @@
 import { Navigate } from 'react-router'
-import { useAppStore } from "@/lib/store/useStore"
+import { useMsal } from "@azure/msal-react"
+import { msalInstance } from "@/lib/auth/msalInstance"
 
 export function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const user = useAppStore().user
-  
-  if (!user) {
+  const { accounts } = useMsal()
+
+  const hasAccountsFromHook = accounts.length > 0
+  const hasAccountsFromCache = msalInstance.getAllAccounts().length > 0
+  const isAuthenticated = hasAccountsFromHook || hasAccountsFromCache
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />
   }
 

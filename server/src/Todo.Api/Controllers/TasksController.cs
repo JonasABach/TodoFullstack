@@ -26,14 +26,16 @@ public class TasksController(IRepository<Entity_Task, AddTaskDto, UpdateTaskDto>
     ILogger<TasksController> logger,
     IValidator<AddTaskDto> addTaskValidator,
     IValidator<UpdateTaskDto> updateTaskValidator,
-    ITaskSummaryService taskSummaryService) : ControllerBase
+    ITaskSummaryService taskSummaryService,
+    IAccountRepository accountRepository) : ControllerBase
 {
 
     [HttpGet("due-summary")]
     public async Task<ActionResult<DueDateSummaryDto>> GetDueDateSummary(
-    CancellationToken cancellationToken)
+        CancellationToken cancellationToken)
     {
-        var summary = await taskSummaryService.GetDueDateSummaryAsync(cancellationToken);
+        var authenticatedUser = await accountRepository.GetUserByClaims(User);
+        var summary = await taskSummaryService.GetDueDateSummaryAsync(authenticatedUser.Id, cancellationToken);
         logger.LogInformation("Returned due date summary");
         return Ok(summary);
     }

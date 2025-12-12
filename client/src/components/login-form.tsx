@@ -10,17 +10,24 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast"
-import { useAppStore } from "@/lib/store/useStore"
+import { useMsal } from "@azure/msal-react"
+import { loginRequest } from "@/lib/auth/msalConfig"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
 import * as z from "zod"
+import { DebugMsalToken } from "@/components/debug" // <-- add this
 
 const loginSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
+  // Email/password fields are now optional because Entra ID (MSAL)
+  // handles authentication instead of this form.
+  email: z
+    .string()
+    .email("Invalid email address")
+    .or(z.literal("")),
+  password: z.string().optional().or(z.literal("")),
 })
 
 type LoginFormData = z.infer<typeof loginSchema>
@@ -30,7 +37,7 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const navigate = useNavigate()
-  const login = useAppStore().login
+  const { instance } = useMsal()
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<LoginFormData>({
@@ -41,22 +48,27 @@ export function LoginForm({
     },
   })
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async () => {
     setIsLoading(true)
     try {
-      await login({
-        email: data.email,
-        password: data.password,
-      })
+      // First sign in with Entra ID (Microsoft)
+      await instance.loginPopup(loginRequest)
+
+      // Optional: keep calling existing login to link to local user if needed
+      // await login({
+      //   email: data.email,
+      //   password: data.password,
+      // })
+
       toast({
         title: "Success",
-        description: "You have successfully logged in.",
+        description: "You have successfully signed in with Microsoft.",
       })
       navigate("/tasks/all", { replace: true })
     } catch (error) {
       toast({
-        title: "Login failed",
-        description: "Invalid email or password. Please try again.",
+        title: "Sign-in failed",
+        description: "We couldn't sign you in with Microsoft. Please try again.",
         variant: "destructive",
       })
       console.error("Login failed:", error)
@@ -152,6 +164,8 @@ export function LoginForm({
                   <span>Google</span>
                 </Button>
               </div>
+              <DebugMsalToken /> {/* Entra ID debug button */}
+
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
                 <Button 

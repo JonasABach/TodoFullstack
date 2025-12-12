@@ -27,7 +27,6 @@ export const listsApi = {
 		const response = await api.post<List>(LISTS_URLs.CREATE_LIST, {
 			name: createListRequest.name,
 			description: createListRequest.description,
-			userId: createListRequest.userId,
 		});
 		if (response.status !== SUCCESSFUL_STATUS) {
 			throw new Error("Failed to create list: " + name);

@@ -1,5 +1,6 @@
 import axios from "axios";
-import { BASE_URL, AUTH_URLs } from "./URLs";
+import { BASE_URL } from "./URLs";
+import { msalInstance, loginRequest } from "@/lib/auth/msalInstance";
 
 const api = axios.create({
 	baseURL: BASE_URL,
@@ -9,10 +10,15 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-	(config) => {
-		const token = localStorage.getItem("accessToken");
-		if (token) {
-			config.headers.Authorization = `Bearer ${token}`;
+	async (config) => {
+		const accounts = msalInstance.getAllAccounts();
+		if (accounts.length > 0) {
+			const response = await msalInstance.acquireTokenSilent({
+				...loginRequest,
+				account: accounts[0],
+			});
+			config.headers = config.headers ?? {};
+			config.headers.Authorization = `Bearer ${response.accessToken}`;
 		}
 		return config;
 	},
@@ -22,38 +28,8 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-	(response) => {
-		return response;
-	},
-	async (error) => {
-		const originalRequest = error.config;
-
-		if (error.response.status === 401 && !originalRequest._retry) {
-			originalRequest._retry = true;
-
-			// Try to refresh the token
-			const refreshToken = localStorage.getItem("refreshToken");
-			if (!refreshToken) {
-				return Promise.reject(error);
-			}
-
-			try {
-				const response = await axios.post(
-					AUTH_URLs.REFRESH_ACCESS_TOKEN_BY_REFRESH_TOKEN,
-					refreshToken
-				);
-				const { accessToken } = response.data;
-
-				localStorage.setItem("accessToken", accessToken);
-				originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-
-				return api(originalRequest);
-			} catch (refreshError) {
-				return Promise.reject(refreshError);
-			}
-		}
-		return Promise.reject(error);
-	}
+	(response) => response,
+	(error) => Promise.reject(error)
 );
 
 export async function withRetry<T>(

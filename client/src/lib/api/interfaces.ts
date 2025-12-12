@@ -77,9 +77,8 @@ export interface List {
 }
 
 export interface CreateListRequest {
-  name: string;
-  description?: string;
-  userId: string;
+	name: string;
+	description?: string;
 }
 
 export interface UpdateListRequest {

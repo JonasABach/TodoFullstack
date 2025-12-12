@@ -1,0 +1,12 @@
+# Node
+client/node_modules/
+client/dist/
+
+# .NET build artifacts
+server/**/bin/
+server/**/obj/
+
+# VS / tooling
+.vs/
+*.user
+*.suo
