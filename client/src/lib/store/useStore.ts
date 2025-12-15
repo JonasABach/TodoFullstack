@@ -1,22 +1,22 @@
-import { createStore, useStore } from 'zustand'
 import { authApi } from '@/lib/api/AuthApi'
-import { userApi } from '@/lib/api/UserApi'
-import { tasksApi } from '@/lib/api/TasksApi'
 import { listsApi } from '@/lib/api/ListsApi'
-import type { 
-  User, 
-  Task, 
-  List,
-  LoginRequest, 
-  RegisterRequest, 
-  ChangePasswordRequest, 
-  UpdateUserInfoRequest, 
-  CreateTaskRequest,
+import { tasksApi } from '@/lib/api/TasksApi'
+import { userApi } from '@/lib/api/UserApi'
+import type {
+  ChangePasswordRequest,
   CreateListRequest,
-  UpdateListRequest,
+  CreateTaskRequest,
+  List,
   ListOrder,
-  TaskOrder
+  LoginRequest,
+  RegisterRequest,
+  Task,
+  TaskOrder,
+  UpdateListRequest,
+  UpdateUserInfoRequest,
+  User
 } from '@/lib/api/interfaces'
+import { createStore, useStore } from 'zustand'
 
 interface State {
   user: User | null
@@ -39,6 +39,7 @@ interface State {
   
   // User actions
   fetchUserInfo: (userId: string) => Promise<void>
+  fetchCurrentUser: () => Promise<void>
   changePassword: (passwordData: ChangePasswordRequest) => Promise<void>
   updateUserInfo: (updateData: UpdateUserInfoRequest) => Promise<void>
   deleteAccount: (userId: string) => Promise<void>
@@ -80,6 +81,11 @@ export const appStore = createStore<State>((set, get) => ({
       // Simply try to load lists; if the API returns 401, we'll
       // fall through to the catch block and clear local state.
       await get().fetchLists()
+
+      // Load the current user profile based on the authenticated
+      // MSAL/Entra ID token, so pages like /account can render
+      // user information without relying on a stored user id.
+      await get().fetchCurrentUser()
 
       const savedListOrder = localStorage.getItem('listOrder');
       const savedTaskOrders = localStorage.getItem('taskOrders');
@@ -154,6 +160,23 @@ export const appStore = createStore<State>((set, get) => ({
     } catch (error) {
       set({ error: 'Failed to fetch user info', isLoading: false })
       throw error
+    }
+  },
+
+  fetchCurrentUser: async () => {
+    set({ isLoading: true, error: null })
+    try {
+      const user = await userApi.getCurrentUser()
+      set({ user, isLoading: false })
+      // Persist user id for backwards compatibility with flows
+      // that still expect it in localStorage.
+      if (user.id) {
+        localStorage.setItem('userId', user.id)
+      }
+    } catch {
+      set({ error: 'Failed to fetch current user info', isLoading: false })
+      // Swallow error so the rest of the app (e.g. lists) can still load
+      // even if user info retrieval fails.
     }
   },
 

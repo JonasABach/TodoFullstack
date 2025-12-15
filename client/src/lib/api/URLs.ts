@@ -29,9 +29,11 @@ const TASKS_URLs = {
 // User URLs
 const USER_URLs = {
 	GET_USER: "/Account/get-user",
+	GET_CURRENT_USER: "/Account/me",
 	CHANGE_PASSWORD: "/Account/change-password",
 	UPDATE_USER_INFO: "/Account/update-user-info",
 	DELETE_ACCOUNT_BY_USER_ID: "/Account/delete-account",
 };
 
-export { BASE_URL, AUTH_URLs, LISTS_URLs, TASKS_URLs, USER_URLs };
+export { AUTH_URLs, BASE_URL, LISTS_URLs, TASKS_URLs, USER_URLs };
+

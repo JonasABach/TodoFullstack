@@ -29,7 +29,8 @@ public class AccountController(
 {
 
     /// <summary>
-    ///     Endpoint for getting the information of the authenticated user.
+    ///     Endpoint for getting the information of the authenticated user by explicit id.
+    ///     Kept for backwards compatibility with token-based auth where the client knew the user id.
     /// </summary>
     /// <param name="id">
     ///     The id of the user to get the information.
@@ -55,6 +56,30 @@ public class AccountController(
             PhoneNumber = userInfo.PhoneNumber
         };
         _logger.LogInformation("User information retrieved successfully for user with id: {id}", userInfo.Id);
+        return Ok(userDto);
+    }
+
+    /// <summary>
+    ///     Endpoint for getting the information of the currently authenticated user
+    ///     based on their claims (works with Entra ID/MSAL).
+    /// </summary>
+    /// <returns>
+    ///     An IActionResult with the current user's information.
+    /// </returns>
+    [HttpGet("me")]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        var userInfo = await _accountRepository.GetUserByClaims(User);
+        var userDto = new UserDto
+        {
+            Id = userInfo.Id,
+            FirstName = userInfo.FirstName,
+            LastName = userInfo.LastName,
+            Email = userInfo.Email ?? string.Empty,
+            UserName = userInfo.UserName ?? string.Empty,
+            PhoneNumber = userInfo.PhoneNumber
+        };
+        _logger.LogInformation("User information retrieved successfully for current user with id: {id}", userInfo.Id);
         return Ok(userDto);
     }
 

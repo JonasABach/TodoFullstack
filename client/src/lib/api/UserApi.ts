@@ -9,6 +9,14 @@ import { USER_URLs } from "./URLs";
 const SUCCESS_STATUS = 200;
 
 export const userApi = {
+	getCurrentUser: async (): Promise<User> => {
+		const response = await api.get<User>(USER_URLs.GET_CURRENT_USER);
+		if (response.status !== SUCCESS_STATUS) {
+			throw new Error("Failed to get current user info");
+		}
+		return response.data;
+	},
+
 	getUser: async (userId: string): Promise<User> => {
 		const response = await api.get<User>(`${USER_URLs.GET_USER}/${userId}`);
 		if (response.status !== SUCCESS_STATUS) {
