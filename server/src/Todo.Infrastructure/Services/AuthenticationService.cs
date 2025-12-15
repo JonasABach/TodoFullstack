@@ -18,7 +18,7 @@ public class AuthenticationService : IAuthService
     ///     The UserManager instance to use for user management operations.
     /// </summary>
     private readonly UserManager<User> _userManager;
-    
+
     /// <summary>
     ///     The TokenService instance to use for token operations.
     /// </summary>
@@ -86,7 +86,7 @@ public class AuthenticationService : IAuthService
 
         // Create the user with the provided password
         var result = await _userManager.CreateAsync(user, registerUserDto.Password);
-        if (!result.Succeeded) 
+        if (!result.Succeeded)
             throw new CreateUserException($"Failed to create user because of: {string.Join(", ", result.Errors.Select(e => e.Description))}");
 
         var token = _tokenService.GenerateToken(user);
@@ -120,7 +120,7 @@ public class AuthenticationService : IAuthService
                    throw new InvalidEmailException("Invalid email");
         if (!await _userManager.CheckPasswordAsync(user, loginUserDto.Password))
             throw new InvalidPasswordException($"Invalid password for the email {loginUserDto.Email} provided");
-        
+
         var token = _tokenService.GenerateToken(user);
         var refreshToken = _tokenService.GenerateRefreshToken();
 
@@ -158,13 +158,13 @@ public class AuthenticationService : IAuthService
         var accessToken = _tokenService.GenerateToken(user);
         var newRefreshToken = _tokenService.GenerateRefreshToken();
         newRefreshToken.UserId = user.Id;
-        
+
         var refreshTokenEntity = await _refreshTokenRepository.AddRefreshTokenAsync(newRefreshToken);
         await UpdateUserRefreshToken(user, refreshTokenEntity);
-        
+
         // Delete old refresh token
         if (oldRefreshTokenId.HasValue)
-          await _refreshTokenRepository.DeleteRefreshTokenAsync(oldRefreshTokenId.Value);
+            await _refreshTokenRepository.DeleteRefreshTokenAsync(oldRefreshTokenId.Value);
 
         return GenerateAuthResponse(user, accessToken, newRefreshToken);
     }
@@ -198,7 +198,7 @@ public class AuthenticationService : IAuthService
     /// </exception>
     public async Task Logout(string username)
     {
-        var user = await _userManager.FindByNameAsync(username) ?? 
+        var user = await _userManager.FindByNameAsync(username) ??
                    throw new UserNotFoundException($"User with username {username} not found");
         user.RefreshToken = null;
         await _userManager.UpdateAsync(user);

@@ -20,7 +20,7 @@ public class CachedTasksRepository : IRepository<Task_Entity, AddTaskDto, Update
         _tasksRepository = tasksRepository;
         _cacheService = cacheService;
     }
-    
+
     public async Task<IEnumerable<Task_Entity>> GetAllAsync(string id)
     {
         var cacheKey = $"List-{id}-Tasks";
@@ -61,7 +61,7 @@ public class CachedTasksRepository : IRepository<Task_Entity, AddTaskDto, Update
                                     throw new ArgumentNullException(taskEntity.ListId.ToString(), "The ListId cannot be null."));
         return updatedTask;
     }
-    
+
     public Task_Entity UpdateEntity(Task_Entity entity, UpdateTaskDto dto) => _tasksRepository.UpdateEntity(entity, dto);
 
     public async Task DeleteAsync(Guid id)
@@ -72,7 +72,7 @@ public class CachedTasksRepository : IRepository<Task_Entity, AddTaskDto, Update
         await UpdateAllTasksInCache(task.ListId.ToString() ??
                                     throw new ArgumentNullException(task.ListId.ToString(), "The ListId cannot be null."));
     }
-    
+
     private async Task UpdateAllTasksInCache(string listId)
     {
         var cacheKey = $"List-{listId}-Tasks";

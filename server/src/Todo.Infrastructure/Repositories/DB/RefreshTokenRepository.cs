@@ -13,7 +13,7 @@ public class RefreshTokenRepository : IRefreshTokenRepository
     ///     The TodoIdentityContext instance to use for database operations.
     /// </summary>
     private readonly TodoIdentityContext _context;
-    
+
     /// <summary>
     ///     Constructor for the RefreshTokenRepository class.
     /// </summary>
@@ -25,8 +25,8 @@ public class RefreshTokenRepository : IRefreshTokenRepository
     public async Task<RefreshToken?> GetRefreshTokenAsync(string refreshToken)
     {
         if (string.IsNullOrEmpty(refreshToken))
-           throw new ArgumentNullException(nameof(refreshToken), "Refresh token cannot be null or empty.");
-        
+            throw new ArgumentNullException(nameof(refreshToken), "Refresh token cannot be null or empty.");
+
         return await _context.RefreshTokens
             .Where(x => x.Token == refreshToken)
             .FirstOrDefaultAsync();

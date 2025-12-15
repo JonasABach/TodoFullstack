@@ -5,18 +5,18 @@ namespace Todo.Core.DTOs.ListDTOs;
 /// </summary>
 public class ListsDto
 {
-  /// <summary>
-  ///  Id of the list.
-  /// </summary>
-  public Guid Id { get; set; }
+    /// <summary>
+    ///  Id of the list.
+    /// </summary>
+    public Guid Id { get; set; }
 
-  /// <summary>
-  ///   Name of the list.
-  /// </summary>
-  public required string Name { get; set; }
+    /// <summary>
+    ///   Name of the list.
+    /// </summary>
+    public required string Name { get; set; }
 
-  /// <summary>
-  ///   Description of the list.
-  /// </summary>
-  public string? Description { get; set; } = string.Empty;
+    /// <summary>
+    ///   Description of the list.
+    /// </summary>
+    public string? Description { get; set; } = string.Empty;
 }
