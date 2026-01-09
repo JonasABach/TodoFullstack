@@ -309,7 +309,7 @@ export function Tasks() {
         </div>
 
         {/* Scrollable Content */}
-        <div className="container flex-1 overflow-auto pb-4">
+        <div className="container flex-1 overflow-y-auto overflow-x-hidden pb-4">
           <TaskList
             tasks={
               listId === 'all'
