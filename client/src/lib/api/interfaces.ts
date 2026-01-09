@@ -112,3 +112,10 @@ export interface DueDateSummary {
   dueThisWeekCount: number;
   dueInFutureCount: number;
 }
+
+export interface TaskFilter {
+  listId?: string;
+  search?: string;
+  isCompleted?: boolean;
+  dueBefore?: string;
+}

@@ -11,7 +11,7 @@ namespace Todo.Infrastructure.Repositories.DB;
 /// <summary>
 ///     A class that implements the IRepository interface for the Task entity.
 /// </summary>
-public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDto>
+public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDto>, ITasksRepository
 {
     /// <summary>
     ///     The database context for the Identity database.
@@ -184,4 +184,33 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
         _identityContext.Tasks.Remove(task);
         await _identityContext.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<Task_Entity>> FilterAsync(
+        TaskFilterDto filter,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _identityContext.Tasks.AsNoTracking().AsQueryable();
+        if (!string.IsNullOrEmpty(filter.ListId) && Guid.TryParse(filter.ListId, out var listGuid))
+        {
+            query = query.Where(t => t.ListId == listGuid);
+        }
+
+        if (filter.IsCompleted.HasValue)
+        {
+            query = query.Where(t => t.IsCompleted == filter.IsCompleted.Value);
+        }
+        if (!string.IsNullOrEmpty(filter.Search))
+        {
+            var searchLower = filter.Search.ToLower();
+            query = query.Where(t =>
+                t.Name.ToLower().Contains(searchLower) ||
+                t.Description.ToLower().Contains(searchLower));
+        }
+        if (filter.DueBefore.HasValue)
+        {
+            query = query.Where(t => t.DueDate <= filter.DueBefore.Value);
+        }
+
+        return await query.ToListAsync(cancellationToken);
+    }  
 }

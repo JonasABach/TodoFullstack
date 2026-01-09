@@ -41,6 +41,8 @@ public static class Extensions
         >();
 
         builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+        builder.Services.AddScoped<ITasksRepository, TasksRepository>();
     }
 
     public static void RegisterCachingRepositories(this WebApplicationBuilder builder)

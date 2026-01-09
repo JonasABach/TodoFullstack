@@ -184,12 +184,6 @@ C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\ne
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets\msbuild.Todo.Api.Microsoft.AspNetCore.StaticWebAssets.props
-C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets\msbuild.Todo.Api.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets\msbuild.build.Todo.Api.props
-C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Todo.Api.props
-C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Todo.Api.props
-C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets.pack.json
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\Todo.Api.csproj.Up2Date
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\Todo.Api.dll
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\refint\Todo.Api.dll
@@ -204,3 +198,9 @@ C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\bin\Debug\ne
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\bin\Debug\net8.0\RBush.dll
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\bin\Debug\net8.0\SixLabors.Fonts.dll
 C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\bin\Debug\net8.0\System.IO.Packaging.dll
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\jbach\Documents\Jobb\IAF\TodoFullstack\server\src\Todo.Api\obj\Debug\net8.0\swae.build.ex.cache

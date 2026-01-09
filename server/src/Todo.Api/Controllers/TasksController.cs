@@ -22,7 +22,7 @@ namespace Todo.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class TasksController(IRepository<Entity_Task, AddTaskDto, UpdateTaskDto> taskRepository,
+public class TasksController(ITasksRepository taskRepository,
     ILogger<TasksController> logger,
     IValidator<AddTaskDto> addTaskValidator,
     IValidator<UpdateTaskDto> updateTaskValidator,
@@ -38,6 +38,37 @@ public class TasksController(IRepository<Entity_Task, AddTaskDto, UpdateTaskDto>
         var summary = await taskSummaryService.GetDueDateSummaryAsync(authenticatedUser.Id, cancellationToken);
         logger.LogInformation("Returned due date summary");
         return Ok(summary);
+    }
+
+    /// <summary>
+    ///     Filter tasks based on optional criteria like list, completion status,
+    ///     search text, and due date.
+    /// </summary>
+    /// <param name="listId">Optional list identifier to scope tasks.</param>
+    /// <param name="search">Optional free-text search for name/description.</param>
+    /// <param name="isCompleted">Optional completion flag filter.</param>
+    /// <param name="dueBefore">Optional upper bound for due date.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A filtered list of tasks matching the provided criteria.</returns>
+    [HttpGet("filter")]
+    public async Task<ActionResult<List<Entity_Task>>> FilterTasks(
+        [FromQuery] string? listId,
+        [FromQuery] string? search,
+        [FromQuery] bool? isCompleted,
+        [FromQuery] DateTime? dueBefore,
+        CancellationToken cancellationToken)
+    {
+        var filter = new TaskFilterDto
+        {
+            ListId = listId,
+            Search = search,
+            IsCompleted = isCompleted,
+            DueBefore = dueBefore
+        };
+
+        var tasks = await taskRepository.FilterAsync(filter, cancellationToken);
+        logger.LogInformation("Filtered tasks returned with provided criteria.");
+        return Ok(tasks.ToList());
     }
 
     /// <summary>

@@ -1,12 +1,8 @@
 import api from "./axios";
-import { DueDateSummary, Task } from "./interfaces";
+import { DueDateSummary, Task, TaskFilter } from "./interfaces";
 import { TASKS_URLs } from "./URLs";
 
 const SUSSCESSFUL_STATUS = 200;
-
-
-
-
 
 export const tasksApi = {
 	getTasksByListId: async (listId: string): Promise<Task[]> => {
@@ -63,5 +59,19 @@ export const tasksApi = {
 	getDueDateSummary: async (): Promise<DueDateSummary> => {
     	const response = await api.get("/tasks/due-summary");
     	return response.data;
-  },
+  	},
+  
+	filterTasks: async (filter: TaskFilter): Promise<Task[]> => {
+		const params = new URLSearchParams();
+		if (filter.listId) params.append("listId", filter.listId);
+		if (filter.search) params.append("search", filter.search);
+		if (filter.isCompleted !== undefined) params.append("isCompleted", filter.isCompleted.toString());
+		if (filter.dueBefore) params.append("dueBefore", filter.dueBefore);
+
+		const response = await api.get<Task[]>(`/tasks/filter`, { params });
+		if (response.status !== SUSSCESSFUL_STATUS) {
+			throw new Error("Failed to filter tasks");
+		}
+		return response.data;
+	},
 };

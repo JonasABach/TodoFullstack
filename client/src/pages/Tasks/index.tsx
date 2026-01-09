@@ -8,6 +8,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { toast } from "@/hooks/use-toast";
 import Layout from "@/layout";
 import { List, Task } from "@/lib/api/interfaces";
+import { tasksApi } from "@/lib/api/TasksApi";
 import { useAppStore } from "@/lib/store/useStore";
 import { MoreHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -15,7 +16,6 @@ import { useNavigate, useParams } from "react-router";
 import { CreateTaskDialog } from "./componenets/CreateTaskDialog";
 import { DueDateFilterOption, SortOption, TaskFilters } from "./componenets/TaskFilters";
 import { TaskList } from "./componenets/TaskList";
-
 interface ToastStateProps {
   id: string;
   dismiss: () => void;
@@ -111,6 +111,32 @@ export function Tasks() {
     }
   }, [listId, lists, tasks, navigate, setSelectedList, selectedListId])
 
+  useEffect(() => {
+    // Simple smoke test: log filtered tasks for the current list
+    const testServerFilter = async () => {
+      try {
+        const result = await tasksApi.filterTasks({
+          listId: selectedListId ?? undefined,
+          search: search || undefined,
+          isCompleted:
+            status === "all"
+              ? undefined
+              : status === "completed"
+                ? true
+                : false,
+        });
+        console.log("Server-filtered tasks:", result);
+      } catch (err) {
+        console.error("Server filter failed", err);
+      }
+    };
+
+    // Call only when lists are loaded and you have tasks
+    if (lists.length > 0) {
+      testServerFilter();
+    }
+  }, [selectedListId, search, status, lists.length]);
+  
   function filterAndSort(tasksSource: Task[]) {
     let filtered = [...tasksSource];
 

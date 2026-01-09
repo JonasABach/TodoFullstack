@@ -1,3 +1,4 @@
+import { DebugMsalToken } from "@/components/debug"; // <-- add this
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -10,15 +11,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast"
-import { useMsal } from "@azure/msal-react"
 import { loginRequest } from "@/lib/auth/msalConfig"
+import { useAppStore } from "@/lib/store/useStore"
 import { cn } from "@/lib/utils"
+import { useMsal } from "@azure/msal-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
 import * as z from "zod"
-import { DebugMsalToken } from "@/components/debug" // <-- add this
 
 const loginSchema = z.object({
   // Email/password fields are now optional because Entra ID (MSAL)
@@ -39,6 +40,7 @@ export function LoginForm({
   const navigate = useNavigate()
   const { instance } = useMsal()
   const [isLoading, setIsLoading] = useState(false)
+  const initializeStore = useAppStore().initializeStore
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -53,6 +55,9 @@ export function LoginForm({
     try {
       // First sign in with Entra ID (Microsoft)
       await instance.loginPopup(loginRequest)
+
+      // After successful sign-in, load user profile, lists, etc.
+      await initializeStore()
 
       // Optional: keep calling existing login to link to local user if needed
       // await login({

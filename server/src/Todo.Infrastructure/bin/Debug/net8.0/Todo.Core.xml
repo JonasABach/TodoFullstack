@@ -1072,6 +1072,19 @@
                 A Task that will return nothing.
             </returns>
         </member>
+        <member name="T:Todo.Core.Interfaces.ITasksRepository">
+            <summary>
+                Specialized repository interface for task-related operations.
+            </summary>
+        </member>
+        <member name="M:Todo.Core.Interfaces.ITasksRepository.FilterAsync(Todo.Core.DTOs.TasksDtos.TaskFilterDto,System.Threading.CancellationToken)">
+            <summary>
+                Returns tasks that match the provided filter options.
+            </summary>
+            <param name="filter">Filter options for querying tasks.</param>
+            <param name="cancellationToken">Token to observe while waiting for the task to complete.</param>
+            <returns>A sequence of tasks that satisfy the filter.</returns>
+        </member>
         <member name="T:Todo.Core.Interfaces.ITokenService">
             <summary>
                 Interface for TokenService
