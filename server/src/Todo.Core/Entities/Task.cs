@@ -64,4 +64,8 @@ public class Task
     /// </summary>
     [JsonIgnore]
     public virtual TaskList? TaskList { get; set; }
+
+    public DateTime? ReminderAt { get; set; }
+
+    public bool ReminderSent { get; set; }
 }

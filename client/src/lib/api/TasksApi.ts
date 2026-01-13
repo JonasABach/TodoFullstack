@@ -24,6 +24,7 @@ export const tasksApi = {
 			dueDate: task.dueDate,
 			priority: task.priority,
 			listId: task.listId,
+			reminderAt: task.reminderAt,
 		});
 		if (response.status !== SUSSCESSFUL_STATUS) {
 			throw new Error("Failed to create task: " + task.name);
@@ -40,6 +41,7 @@ export const tasksApi = {
 			priority: task.priority,
 			isCompleted: task.isCompleted,
 			listId: task.listId,
+			reminderAt: task.reminderAt,
 		});
 		if (response.status !== SUSSCESSFUL_STATUS) {
 			throw new Error("Failed to update task with id: " + task.id);
@@ -61,6 +63,14 @@ export const tasksApi = {
     	return response.data;
   	},
   
+	processReminders: async (): Promise<{ processed: number }> => {
+		const response = await api.post<{ processed: number }>("/tasks/process-reminders");
+		if (response.status !== SUSSCESSFUL_STATUS) {
+			throw new Error("Failed to process reminders");
+		}
+		return response.data;
+	},
+
 	filterTasks: async (filter: TaskFilter): Promise<Task[]> => {
 		const params = new URLSearchParams();
 		if (filter.listId) params.append("listId", filter.listId);

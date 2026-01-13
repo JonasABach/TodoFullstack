@@ -66,6 +66,8 @@ export interface Task {
 	priority: TaskPriority;
 	isCompleted: boolean;
 	dueDate?: string | null;
+	reminderAt?: string | null;
+  	reminderSent?: boolean;
 	
 }
 
@@ -94,6 +96,8 @@ export interface CreateTaskRequest {
   priority: TaskPriority;
   listId: string;
   isCompleted: boolean;
+  reminderAt?: string | null;
+  reminderSent?: boolean;
 }
 
 export interface ListOrder {

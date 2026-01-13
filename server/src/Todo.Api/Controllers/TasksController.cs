@@ -181,4 +181,22 @@ public class TasksController(ITasksRepository taskRepository,
         logger.LogInformation("Task with ID: {taskId} deleted successfully.", id);
         return Ok();
     }
+
+    [HttpPost("process-reminders")]
+    public async Task<ActionResult> ProcessReminders(CancellationToken cancellationToken)
+    {
+        var now = DateTime.UtcNow;
+        var dueTasks = await taskRepository.ProcessDueRemindersAsync(now, cancellationToken);
+
+        foreach (var task in dueTasks)
+        {
+            // TODO: replace with real notification (email, push, etc.)
+            logger.LogInformation("Reminder: task {Id} is due.", task.Id);
+        }
+
+        var count = dueTasks.Count;
+        logger.LogInformation("Processed {Count} due reminders.", count);
+
+        return Ok(new { processed = count });
+    }
 }

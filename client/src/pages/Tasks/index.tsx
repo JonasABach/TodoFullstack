@@ -251,6 +251,25 @@ export function Tasks() {
   // Show/hide list actions based on view
   const showListActions = !['all', 'completed'].includes(listId || '');
 
+  const handleProcessReminders = async () => {
+    try {
+      const result = await tasksApi.processReminders();
+      toast({
+        title: "Reminders processed",
+        description: `${result.processed} reminders processed successfully.`,
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error("Failed to process reminders", error);
+      toast({
+        title: "Error",
+        description: "Failed to process reminders. Please try again.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    }
+  };
+
   return (
     <Layout>
       <div className="container mx-auto flex flex-col h-[calc(100vh-2rem)]">
@@ -290,11 +309,16 @@ export function Tasks() {
                 )}
               </div>
             </div>
-            {listId === 'all' ? (
-              <ImportTasksFromExcel />
-            ) : (
-              showListActions && <CreateTaskDialog />
-            )}
+            <div className="flex gap-2">
+              {listId === 'all' ? (
+                <ImportTasksFromExcel />
+              ) : (
+                showListActions && <CreateTaskDialog />
+              )}
+              <Button variant="outline" size="sm" onClick={handleProcessReminders}>
+                Run Reminders
+              </Button>
+            </div>
           </div>
           <DueDateSummaryWidget />
 

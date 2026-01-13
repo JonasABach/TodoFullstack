@@ -28,4 +28,6 @@ public class AddTaskDto
     ///     The status of the task.
     /// </summary>
     public required Guid ListId { get; init; }
+
+    public DateTime? ReminderAt { get; init; }
 }

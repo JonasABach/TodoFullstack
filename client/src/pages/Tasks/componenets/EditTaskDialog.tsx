@@ -57,6 +57,7 @@ const taskSchema = z.object({
       },
       { message: "Due date must be today or in the future" }
     ),
+  reminderAt: z.string().nullable().optional(),
 });
 
 type TaskForm = z.infer<typeof taskSchema>;
@@ -83,6 +84,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
       priority: task.priority,
       isCompleted: task.isCompleted,
       dueDate: task.dueDate ? task.dueDate.split("T")[0] : null,
+      reminderAt: task.reminderAt ? task.reminderAt.split("T")[0] : null,
     },
   })
 
@@ -92,6 +94,7 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
       await updateTask({
         ...task,
         ...data,
+        reminderAt: data.reminderAt ? new Date(data.reminderAt).toISOString() : null,
       })
       toast({
         title: "Task updated",
@@ -221,6 +224,25 @@ export function EditTaskDialog({ task, open, onOpenChange }: EditTaskDialogProps
                   <FormControl>
                     <Input
                       type="date"
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value || null)}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="reminderAt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Reminder time</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="datetime-local"
                       value={field.value ?? ""}
                       onChange={(e) => field.onChange(e.target.value || null)}
                       disabled={isSubmitting}

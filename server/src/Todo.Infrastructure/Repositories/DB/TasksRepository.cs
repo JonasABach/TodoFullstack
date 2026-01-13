@@ -97,7 +97,8 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
             DueDate = dto.DueDate ?? null,
             IsCompleted = false,
             Priority = (TaskPriority)dto.Priority,
-            ListId = dto.ListId
+            ListId = dto.ListId,
+            ReminderAt = dto.ReminderAt
         };
 
         _identityContext.Tasks.Add(task); // Add the new Task to the database context.
@@ -161,7 +162,8 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
         // Update the task's due date.
         entity.DueDate = dto.DueDate;
         entity.Priority = dto.Priority;
-
+        entity.ReminderAt = dto.ReminderAt;
+        
         return entity;
     }
 
@@ -212,5 +214,34 @@ public class TasksRepository : IRepository<Task_Entity, AddTaskDto, UpdateTaskDt
         }
 
         return await query.ToListAsync(cancellationToken);
-    }  
-}
+    }
+
+    /// <summary>
+    ///     Finds tasks with due reminders (not completed, reminder time
+    ///     at or before the specified moment, and not yet sent), marks
+    ///     their reminders as sent, and saves changes.
+    /// </summary>
+    public async Task<IReadOnlyList<Task_Entity>> ProcessDueRemindersAsync(
+        DateTime now,
+        CancellationToken cancellationToken = default)
+    {
+        var dueReminders = await _identityContext.Tasks
+            .Where(t => !t.IsCompleted
+                        && t.ReminderAt.HasValue
+                        && t.ReminderAt <= now
+                        && !t.ReminderSent)
+            .ToListAsync(cancellationToken);
+
+        foreach (var task in dueReminders)
+        {
+            task.ReminderSent = true;
+        }
+
+        if (dueReminders.Count > 0)
+        {
+            await _identityContext.SaveChangesAsync(cancellationToken);
+        }
+
+        return dueReminders;
+    }
+} 

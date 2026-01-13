@@ -44,6 +44,9 @@ const taskSchema = z.object({
   priority: z.number()
     .min(0, "Priority must be between 0 and 4")
     .max(4, "Priority must be between 0 and 4"),
+  reminderAt: z.date()
+    .min(new Date(), "Reminder date must be in the future")
+    .optional(),
 });
 
 type CreateTaskForm = z.infer<typeof taskSchema>;
@@ -58,6 +61,7 @@ export function CreateTaskDialog() {
       description: "",
       duedate: undefined,
       priority: TaskPriority.Low,
+      reminderAt: undefined,
     },
   })
   const { createTask, selectedListId } = useAppStore()
@@ -82,6 +86,7 @@ export function CreateTaskDialog() {
         priority: data.priority,
         isCompleted: false,
         listId: selectedListId,
+        reminderAt: data.reminderAt ? data.reminderAt.toISOString() : null,
       })
       toast({
         title: "Task created",
@@ -188,6 +193,31 @@ export function CreateTaskDialog() {
                         ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="reminderAt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Reminder time (optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="datetime-local"
+                      value={
+                        field.value
+                          ? new Date(field.value).toISOString().slice(0, 16)
+                          : ""
+                      }
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        field.onChange(v ? new Date(v) : undefined);
+                      }}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

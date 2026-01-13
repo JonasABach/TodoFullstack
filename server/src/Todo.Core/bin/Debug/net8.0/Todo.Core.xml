@@ -1085,6 +1085,17 @@
             <param name="cancellationToken">Token to observe while waiting for the task to complete.</param>
             <returns>A sequence of tasks that satisfy the filter.</returns>
         </member>
+        <member name="M:Todo.Core.Interfaces.ITasksRepository.ProcessDueRemindersAsync(System.DateTime,System.Threading.CancellationToken)">
+            <summary>
+                Processes due reminders by finding tasks that are not completed,
+                have a reminder scheduled at or before the specified time, and
+                have not yet had a reminder sent. Marks them as reminded and
+                persists the changes.
+            </summary>
+            <param name="now">The cutoff time for due reminders.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The list of tasks for which reminders were processed.</returns>
+        </member>
         <member name="T:Todo.Core.Interfaces.ITokenService">
             <summary>
                 Interface for TokenService

@@ -34,4 +34,6 @@ public class UpdateTaskDto
     ///     Gets or sets the task status.
     /// </summary>
     public bool IsCompleted { get; set; }
+
+    public DateTime? ReminderAt { get; set; }
 }

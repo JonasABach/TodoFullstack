@@ -20,4 +20,17 @@ public interface ITasksRepository : IRepository<TaskEntity, AddTaskDto, UpdateTa
     Task<IEnumerable<TaskEntity>> FilterAsync(
         TaskFilterDto filter,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Processes due reminders by finding tasks that are not completed,
+    ///     have a reminder scheduled at or before the specified time, and
+    ///     have not yet had a reminder sent. Marks them as reminded and
+    ///     persists the changes.
+    /// </summary>
+    /// <param name="now">The cutoff time for due reminders.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The list of tasks for which reminders were processed.</returns>
+    Task<IReadOnlyList<TaskEntity>> ProcessDueRemindersAsync(
+        DateTime now,
+        CancellationToken cancellationToken = default);
 }
